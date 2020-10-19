@@ -1,0 +1,6 @@
+# AK3 (cloned by the script)
+anykernel3/
+# Kernel folder
+kernels/
+# Build artifacts
+out/
