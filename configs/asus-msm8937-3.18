@@ -4,6 +4,7 @@ KERNEL_DIR_NAME="asus-msm8937-3.18"
 # Device info
 ARCH=arm64
 DEVICE_IS_AB="0"
+DEVICE_HAVE_NO_RAMDISK="true"
 DEVICE_BLOCK_PARTITION="/dev/block/bootdevice/by-name/boot"
 
 # Building artifacts list (e.g. "Image dtb.img", or "Image.gz-dtb")
