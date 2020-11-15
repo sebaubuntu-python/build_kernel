@@ -96,11 +96,18 @@ ramdisk_compression=auto;
 # import patching functions/variables - see for reference
 . tools/ak3-core.sh;
 
-## AnyKernel install
-dump_boot;
+## AnyKernel install" >> "${ANYKERNEL_DIR}/anykernel.sh"
+if [ "$DEVICE_HAVE_NO_RAMDISK" = "true" ]; then
+	echo "split_boot;
 
-write_boot;
-## end install
+flash_boot;
+flash_dtbo;" >> "${ANYKERNEL_DIR}/anykernel.sh"
+else
+	echo "dump_boot;
+
+write_boot;" >> "${ANYKERNEL_DIR}/anykernel.sh"
+fi
+echo "## end install
 " >> "${ANYKERNEL_DIR}/anykernel.sh"
 }
 
