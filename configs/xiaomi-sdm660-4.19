@@ -1,0 +1,18 @@
+# Kernel sources folder name
+KERNEL_DIR_NAME="xiaomi-sdm660-4.19"
+
+# Device info
+ARCH=arm64
+DEVICE_IS_AB="0"
+DEVICE_HAVE_NO_RAMDISK="false"
+DEVICE_BLOCK_PARTITION="/dev/block/bootdevice/by-name/boot"
+
+# Building artifacts list (e.g. "Image dtb.img", or "Image.gz-dtb")
+BUILD_ARTIFACTS="Image.gz-dtb"
+
+# Cross-compiler (gcc or clang)
+TOOLCHAIN=clang
+
+# Kernel name
+DEVICE_KERNEL_NAME=""
+DEVICE_KERNEL_VERSION="0"

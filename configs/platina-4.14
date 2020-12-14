@@ -1,0 +1,6 @@
+# Source common kernel config
+source "${CONFIGS_DIR}/xiaomi-sdm660-4.14"
+
+# Device info
+DEVICE_CODENAME=platina
+DEFCONFIG=platina_defconfig
