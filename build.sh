@@ -20,6 +20,9 @@ while [ "${#}" -gt 0 ]; do
 		-c | --clean )
 			CLEAN="true"
 			;;
+		--kernel-headers )
+			KERNEL_HEADERS="true"
+			;;
 		* )
 			PROJECT="${1}"
 			;;
@@ -98,9 +101,15 @@ else
 	echo ": done"
 fi
 
-# Build kernel
-echo "Running command: make"
-make ${MAKE_FLAGS} | tee ${OUT_DIR}/build_log.txt | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
+if [ "${KERNEL_HEADERS}" != "true" ]; then
+	# Build kernel
+	echo "Running command: make"
+	make ${MAKE_FLAGS} | tee ${OUT_DIR}/build_log.txt | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
+else
+	# Build kernel headers
+	echo "Running command: make headers_install"
+	make ${MAKE_FLAGS} headers_install | tee ${OUT_DIR}/build_log.txt | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
+fi
 
 BUILD_SUCCESS=$?
 BUILD_END=$(date +"%s")
@@ -114,6 +123,9 @@ fi
 echo ""
 echo -e "${green}Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds${reset}"
 echo ""
+
+[ "${KERNEL_HEADERS}" = "true" ] && exit
+
 printf "Making flashable zip using anykernel3"
 
 cd "${ROOT_DIR}"
