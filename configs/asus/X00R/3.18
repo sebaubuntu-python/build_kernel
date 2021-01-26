@@ -1,5 +1,5 @@
 # Source common kernel config
-source "${CONFIGS_DIR}/asus-msm8937-3.18"
+source "${CONFIGS_DIR}/asus/msm8937-common/3.18"
 
 # Device info
 DEVICE_CODENAME=X00R

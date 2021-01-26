@@ -1,5 +1,5 @@
 # Kernel sources folder name
-KERNEL_DIR_NAME="xiaomi-sdm660-4.19"
+KERNEL_DIR_NAME="xiaomi/sdm660-4.14"
 
 # Device info
 ARCH=arm64
