@@ -66,6 +66,8 @@ create_localversion
 print_summary
 setup_building_variables
 
+[ ! -d "${OUT_DIR}" ] && mkdir "${OUT_DIR}"
+
 # Clean
 if [ "${CLEAN}" = "true" ]; then
 	printf "Running command: make clean"
