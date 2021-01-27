@@ -16,6 +16,17 @@
 #
 
 create_ak3_config() {
+	if [ "$DEVICE_HAVE_NO_RAMDISK" = "true" ]; then
+		local FLASH_PROCEDURE="split_boot;
+
+flash_boot;
+flash_dtbo;" >> "${ANYKERNEL_DIR}/anykernel.sh"
+	else
+		local FLASH_PROCEDURE="dump_boot;
+
+write_boot;" >> "${ANYKERNEL_DIR}/anykernel.sh"
+	fi
+
 	rm "${ANYKERNEL_DIR}/anykernel.sh"
 	echo "# AnyKernel3 Ramdisk Mod Script
 # osm0sis @ xda-developers
@@ -41,18 +52,9 @@ ramdisk_compression=auto;
 # import patching functions/variables - see for reference
 . tools/ak3-core.sh;
 
-## AnyKernel install" >> "${ANYKERNEL_DIR}/anykernel.sh"
-if [ "$DEVICE_HAVE_NO_RAMDISK" = "true" ]; then
-	echo "split_boot;
-
-flash_boot;
-flash_dtbo;" >> "${ANYKERNEL_DIR}/anykernel.sh"
-else
-	echo "dump_boot;
-
-write_boot;" >> "${ANYKERNEL_DIR}/anykernel.sh"
-fi
-echo "## end install
+## AnyKernel install
+${FLASH_PROCEDURE}
+## end install
 " >> "${ANYKERNEL_DIR}/anykernel.sh"
 }
 
