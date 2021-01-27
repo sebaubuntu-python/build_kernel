@@ -20,7 +20,6 @@ set -o pipefail
 
 source "${BUILD_DIR}/core.sh"
 source "${BUILD_DIR}/ak3.sh"
-source "${BUILD_DIR}/functions.sh"
 source "${BUILD_DIR}/variables.sh"
 source "${ROOT_DIR}/settings.conf"
 

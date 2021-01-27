@@ -28,3 +28,66 @@ DATE="$(date +"%m-%d-%y")"
 build() {
 	make ${MAKE_FLAGS} "$@"
 }
+
+create_localversion() {
+	if [ "${COMMON_KERNEL_NAME}" != "" ]; then
+		LOCALVERSION="${LOCALVERSION}-${COMMON_KERNEL_NAME}"
+	fi
+	if [ "${DEVICE_KERNEL_NAME}" != "" ]; then
+		LOCALVERSION="${LOCALVERSION}-${DEVICE_KERNEL_NAME}"
+	fi
+	if [ "${COMMON_KERNEL_VERSION}" != "" ]; then
+		LOCALVERSION="${LOCALVERSION}-${COMMON_KERNEL_VERSION}"
+	fi
+	if [ "${DEVICE_KERNEL_VERSION}" != "" ]; then
+		LOCALVERSION="${LOCALVERSION}-${DEVICE_KERNEL_VERSION}"
+	fi
+}
+
+setup_building_variables() {
+	export PATH="${CLANG_PATH}/bin:${GCC_AARCH64_PATH}/bin:${GCC_ARM_PATH}/bin:${PATH}"
+
+	MAKE_FLAGS="O=${OUT_DIR} ARCH=${ARCH} SUBARCH=${ARCH} -j$(nproc --all)"
+	if [ $ARCH = arm64 ]; then
+		MAKE_FLAGS="${MAKE_FLAGS} CROSS_COMPILE=aarch64-linux-android- CROSS_COMPILE_ARM32=arm-linux-androideabi-"
+	elif [ $ARCH = arm ]; then
+		MAKE_FLAGS="${MAKE_FLAGS} CROSS_COMPILE=arm-linux-androideabi-"
+	fi
+	if [ "${TOOLCHAIN}" = "clang" ]; then
+		MAKE_FLAGS="${MAKE_FLAGS} CC=clang"
+		if [ "${ARCH}" = arm64 ]; then
+			MAKE_FLAGS="${MAKE_FLAGS} CLANG_TRIPLE=aarch64-linux-gnu-"
+		elif [ "${ARCH}" = arm ]; then
+			MAKE_FLAGS="${MAKE_FLAGS} CLANG_TRIPLE=arm-linux-gnu-"
+		fi
+	fi
+	if [ "${LOCALVERSION}" != "" ]; then
+		MAKE_FLAGS="${MAKE_FLAGS} LOCALVERSION=$LOCALVERSION"
+	fi
+}
+
+clone_toolchain() {
+	if [ ! -d "prebuilts/${TOOLCHAIN}" ]; then
+		echo "Cloning toolchain"
+		git clone "${TOOLCHAINS_REMOTE}" "prebuilts/${TOOLCHAIN}" -b "prebuilts-${TOOLCHAIN}" --single-branch --depth=1
+	fi
+}
+
+print_summary() {
+	echo -e "-----------------------------------------------------"
+	echo    " Linux kernel version: ${LINUX_VERSION}              "
+	echo    " Architecture: ${ARCH}                               "
+	echo    " Last commit: ${KERNEL_LAST_COMMIT}                  "
+	echo    " Sources directory: ${KERNEL_DIR}                    "
+	echo    " Output directory: ${OUT_DIR}                        "
+	echo    " Build user: ${KBUILD_BUILD_USER}                    "
+	echo    " Build machine: ${KBUILD_BUILD_HOST}                 "
+	echo    " Build started on: $(date -d @${BUILD_START})        "
+	if [ "${TOOLCHAIN}" = "clang" ]; then
+	echo    " Toolchain: Clang ${CLANG_VERSION}                   "
+	else
+	echo    " Toolchain: GCC ${GCC_VERSION}                       "
+	fi
+	echo -e "-----------------------------------------------------"
+}
+
