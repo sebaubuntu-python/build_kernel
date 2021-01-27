@@ -19,6 +19,7 @@
 set -o pipefail
 
 source "${BUILD_DIR}/core.sh"
+source "${BUILD_DIR}/ak3.sh"
 source "${BUILD_DIR}/functions.sh"
 source "${BUILD_DIR}/variables.sh"
 source "${ROOT_DIR}/settings.conf"
@@ -123,31 +124,6 @@ echo ""
 
 [ "${KERNEL_HEADERS}" = "true" ] && exit
 
-printf "Making flashable zip using anykernel3"
-
-cd "${ROOT_DIR}"
-
-# Always reclone AK3
-[ -d "${ANYKERNEL_DIR}" ] && rm -rf "${ANYKERNEL_DIR}"
-git clone https://github.com/osm0sis/AnyKernel3 "${ANYKERNEL_DIR}" -q
-
-# Include build artifacts in anykernel3 zip
-for i in $BUILD_ARTIFACTS; do
-	cp "$OUT_DIR/arch/$ARCH/boot/$i" "$ANYKERNEL_DIR/$i"
-done
-
-cd "${ANYKERNEL_DIR}"
-
-create_ak3_config
-create_ak3_zip_filename
-
-# Build a flashable zip using anykernel3
-zip -r9 "${AK3_ZIP_NAME}" * -x .git/ README.md "${AK3_ZIP_NAME}" > /dev/null
-
-echo ": done"
-
-# Return to initial pwd
-cd "${ROOT_DIR}"
+generate_ak3_zip
 
 echo "${green}All done${reset}"
-echo "Flashable zip: ${ANYKERNEL_DIR}/${AK3_ZIP_NAME}"
