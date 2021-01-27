@@ -67,10 +67,12 @@ setup_building_variables() {
 }
 
 clone_toolchain() {
-	if [ ! -d "${PREBUILTS_DIR}/${TOOLCHAIN}" ]; then
-		echo "Cloning toolchain"
-		git clone "${TOOLCHAINS_REMOTE}" "${PREBUILTS_DIR}/${TOOLCHAIN}" -b "prebuilts-${TOOLCHAIN}" --single-branch --depth=1
-	fi
+	for toolchain in "clang" "gcc"; do
+		if [ ! -d "${PREBUILTS_DIR}/${toolchain}" ]; then
+			echo "Cloning toolchain: ${toolchain}"
+			git clone "${TOOLCHAINS_REMOTE}" "${PREBUILTS_DIR}/${toolchain}" -b "prebuilts-${toolchain}" --single-branch --depth=1
+		fi
+	done
 }
 
 print_summary() {
