@@ -46,6 +46,7 @@ if [ ! -f "${CONFIGS_DIR}/${PROJECT}" ]; then
 	exit
 fi
 
+source "${BUILD_DIR}/core.sh"
 source "${BUILD_DIR}/functions.sh"
 source "${BUILD_DIR}/variables.sh"
 source "${ROOT_DIR}/settings.conf"
@@ -72,7 +73,7 @@ clone_toolchain
 # Clean
 if [ "${CLEAN}" = "true" ]; then
 	printf "Running command: make clean"
-	make ${MAKE_FLAGS} clean &> "${OUT_DIR}/clean_log.txt"
+	build clean &> "${OUT_DIR}/clean_log.txt"
 	CLEAN_SUCCESS=$?
 	if [ "${CLEAN_SUCCESS}" != 0 ]; then
 		echo "${red}Error: make clean failed${reset}"
@@ -82,7 +83,7 @@ if [ "${CLEAN}" = "true" ]; then
 	fi
 
 	printf "Running command: make mrproper"
-	make ${MAKE_FLAGS} mrproper &> "${OUT_DIR}/mrproper_log.txt"
+	build mrproper &> "${OUT_DIR}/mrproper_log.txt"
 	MRPROPER_SUCCESS=$?
 	if [ "${MRPROPER_SUCCESS}" != 0 ]; then
 		echo "${red}Error: make mrproper failed${reset}"
@@ -94,7 +95,7 @@ fi
 
 # Make defconfig
 printf "Running command: make ${DEFCONFIG}"
-make ${MAKE_FLAGS} "${DEFCONFIG}" &> ${OUT_DIR}/defconfig_log.txt
+build "${DEFCONFIG}" &> ${OUT_DIR}/defconfig_log.txt
 
 DEFCONFIG_SUCCESS=$?
 if [ "${DEFCONFIG_SUCCESS}" != 0 ]; then
@@ -107,11 +108,11 @@ fi
 if [ "${KERNEL_HEADERS}" != "true" ]; then
 	# Build kernel
 	echo "Running command: make"
-	make ${MAKE_FLAGS} | tee "${OUT_DIR}/build_log.txt" | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
+	build | tee "${OUT_DIR}/build_log.txt" | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
 else
 	# Build kernel headers
 	echo "Running command: make headers_install"
-	make ${MAKE_FLAGS} headers_install | tee "${OUT_DIR}/build_log.txt" | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
+	build headers_install | tee "${OUT_DIR}/build_log.txt" | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
 fi
 
 BUILD_SUCCESS=$?
