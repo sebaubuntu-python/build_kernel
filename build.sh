@@ -15,6 +15,9 @@
 # limitations under the License.
 #
 
+# Make pipelines return last non-zero exit code
+set -o pipefail
+
 source "${BUILD_DIR}/core.sh"
 source "${BUILD_DIR}/functions.sh"
 source "${BUILD_DIR}/variables.sh"
