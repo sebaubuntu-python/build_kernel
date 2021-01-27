@@ -20,13 +20,13 @@ TOOLCHAINS_REMOTE="https://github.com/SebaUbuntu/android-kernel-builder"
 
 # GCC path
 GCC_VERSION=4.9
-GCC_PATH=$PREBUILTS_DIR/gcc/linux-x86
-GCC_AARCH64_PATH=$GCC_PATH/aarch64/aarch64-linux-android-${GCC_VERSION}
-GCC_ARM_PATH=$GCC_PATH/arm/arm-linux-androideabi-${GCC_VERSION}
+GCC_PATH="${PREBUILTS_DIR}/gcc/linux-x86"
+GCC_AARCH64_PATH="${GCC_PATH}/aarch64/aarch64-linux-android-${GCC_VERSION}"
+GCC_ARM_PATH="${GCC_PATH}/arm/arm-linux-androideabi-${GCC_VERSION}"
 
 # Clang path
 CLANG_VERSION=r383902b
-CLANG_PATH=$PREBUILTS_DIR/clang/linux-x86/clang-${CLANG_VERSION}
+CLANG_PATH="${PREBUILTS_DIR}/clang/linux-x86/clang-${CLANG_VERSION}"
 
 # Color definition
 red=`tput setaf 1`
