@@ -18,9 +18,9 @@
 # Make pipelines return last non-zero exit code
 set -o pipefail
 
-source "${BUILD_DIR}/core.sh"
-source "${BUILD_DIR}/ak3.sh"
-source "${BUILD_DIR}/variables.sh"
+source "build/core.sh"
+source "build/ak3.sh"
+source "build/variables.sh"
 source "${ROOT_DIR}/settings.conf"
 
 while [ "${#}" -gt 0 ]; do
