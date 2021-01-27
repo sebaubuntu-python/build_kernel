@@ -15,6 +15,16 @@
 # limitations under the License.
 #
 
+# Set defaults directories and variables
+ROOT_DIR="$(pwd)"
+ANYKERNEL_DIR="${ROOT_DIR}/anykernel3"
+BUILD_DIR="${ROOT_DIR}/build"
+CONFIGS_DIR="${ROOT_DIR}/configs"
+KERNELS_DIR="${ROOT_DIR}/kernels"
+OUT_DIR="${ROOT_DIR}/out"
+PREBUILTS_DIR="${ROOT_DIR}/prebuilts"
+DATE="$(date +"%m-%d-%y")"
+
 build() {
 	make ${MAKE_FLAGS} "$@"
 }

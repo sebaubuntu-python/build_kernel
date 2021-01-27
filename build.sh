@@ -30,16 +30,6 @@ while [ "${#}" -gt 0 ]; do
 	shift
 done
 
-# Set defaults directories and variables
-ROOT_DIR="$(pwd)"
-ANYKERNEL_DIR="${ROOT_DIR}/anykernel3"
-BUILD_DIR="${ROOT_DIR}/build"
-CONFIGS_DIR="${ROOT_DIR}/configs"
-KERNELS_DIR="${ROOT_DIR}/kernels"
-OUT_DIR="${ROOT_DIR}/out"
-PREBUILTS_DIR="${ROOT_DIR}/prebuilts"
-DATE="$(date +"%m-%d-%y")"
-
 # Source config files
 if [ ! -f "${CONFIGS_DIR}/${PROJECT}" ]; then
 	echo "Error: project configuration file not found"
