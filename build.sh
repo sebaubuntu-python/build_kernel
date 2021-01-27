@@ -54,14 +54,16 @@ KERNEL_LAST_COMMIT=$(git log -1 --format="%h")
 if [ "${KERNEL_LAST_COMMIT}" = "" ]; then
 	KERNEL_LAST_COMMIT="Unknown"
 fi
-BUILD_START="$(date +'%s')"
 
 create_localversion
-print_summary
 setup_building_variables
 clone_toolchain
 
 [ ! -d "${OUT_DIR}" ] && mkdir "${OUT_DIR}"
+
+BUILD_START="$(date +'%s')"
+
+print_summary
 
 # Clean
 if [ "${CLEAN}" = "true" ]; then
