@@ -15,6 +15,11 @@
 # limitations under the License.
 #
 
+source "${BUILD_DIR}/core.sh"
+source "${BUILD_DIR}/functions.sh"
+source "${BUILD_DIR}/variables.sh"
+source "${ROOT_DIR}/settings.conf"
+
 while [ "${#}" -gt 0 ]; do
 	case "${1}" in
 		-c | --clean )
@@ -35,11 +40,6 @@ if [ ! -f "${CONFIGS_DIR}/${PROJECT}" ]; then
 	echo "Error: project configuration file not found"
 	exit
 fi
-
-source "${BUILD_DIR}/core.sh"
-source "${BUILD_DIR}/functions.sh"
-source "${BUILD_DIR}/variables.sh"
-source "${ROOT_DIR}/settings.conf"
 source "${CONFIGS_DIR}/${PROJECT}"
 
 KERNEL_DIR="${KERNELS_DIR}/${KERNEL_DIR_NAME}"
