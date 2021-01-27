@@ -65,6 +65,7 @@ BUILD_START="$(date +'%s')"
 create_localversion
 print_summary
 setup_building_variables
+clone_toolchain
 
 [ ! -d "${OUT_DIR}" ] && mkdir "${OUT_DIR}"
 

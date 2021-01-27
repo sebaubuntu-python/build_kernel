@@ -15,6 +15,9 @@
 # limitations under the License.
 #
 
+# Toolchain repos
+TOOLCHAINS_REMOTE="https://github.com/SebaUbuntu/android-kernel-builder"
+
 # GCC path
 GCC_VERSION=4.9
 GCC_PATH=$PREBUILTS_DIR/gcc/linux-x86

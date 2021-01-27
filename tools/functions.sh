@@ -52,6 +52,13 @@ setup_building_variables() {
 	fi
 }
 
+clone_toolchain() {
+	if [ ! -d "prebuilts/${TOOLCHAIN}" ]; then
+		echo "Cloning toolchain"
+		git clone "${TOOLCHAINS_REMOTE}" "prebuilts/${TOOLCHAIN}" -b "prebuilts-${TOOLCHAIN}" --single-branch --depth=1
+	fi
+}
+
 print_summary() {
 	echo -e "-----------------------------------------------------"
 	echo    " Linux kernel version: ${LINUX_VERSION}              "

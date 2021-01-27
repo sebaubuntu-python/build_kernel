@@ -4,3 +4,5 @@ anykernel3/
 kernels/
 # Build artifacts
 out/
+# Toolchains
+prebuilts/
