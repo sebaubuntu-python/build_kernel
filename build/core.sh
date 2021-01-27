@@ -67,9 +67,9 @@ setup_building_variables() {
 }
 
 clone_toolchain() {
-	if [ ! -d "prebuilts/${TOOLCHAIN}" ]; then
+	if [ ! -d "${PREBUILTS_DIR}/${TOOLCHAIN}" ]; then
 		echo "Cloning toolchain"
-		git clone "${TOOLCHAINS_REMOTE}" "prebuilts/${TOOLCHAIN}" -b "prebuilts-${TOOLCHAIN}" --single-branch --depth=1
+		git clone "${TOOLCHAINS_REMOTE}" "${PREBUILTS_DIR}/${TOOLCHAIN}" -b "prebuilts-${TOOLCHAIN}" --single-branch --depth=1
 	fi
 }
 
