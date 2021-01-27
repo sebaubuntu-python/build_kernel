@@ -33,11 +33,11 @@ done
 # Set defaults directories and variables
 ROOT_DIR="$(pwd)"
 ANYKERNEL_DIR="${ROOT_DIR}/anykernel3"
+BUILD_DIR="${ROOT_DIR}/build"
 CONFIGS_DIR="${ROOT_DIR}/configs"
 KERNELS_DIR="${ROOT_DIR}/kernels"
 OUT_DIR="${ROOT_DIR}/out"
 PREBUILTS_DIR="${ROOT_DIR}/prebuilts"
-TOOLS_DIR="${ROOT_DIR}/tools"
 DATE="$(date +"%m-%d-%y")"
 
 # Source config files
@@ -46,8 +46,8 @@ if [ ! -f "${CONFIGS_DIR}/${PROJECT}" ]; then
 	exit
 fi
 
-source "${TOOLS_DIR}/functions.sh"
-source "${TOOLS_DIR}/variables.sh"
+source "${BUILD_DIR}/functions.sh"
+source "${BUILD_DIR}/variables.sh"
 source "${ROOT_DIR}/settings.conf"
 source "${CONFIGS_DIR}/${PROJECT}"
 
