@@ -26,7 +26,7 @@ PREBUILTS_DIR="${ROOT_DIR}/prebuilts"
 DATE="$(date +"%m-%d-%y")"
 
 build() {
-	make ${MAKE_FLAGS} "$@"
+	make "${MAKE_FLAGS[@]}" "$@"
 }
 
 create_localversion() {
@@ -49,26 +49,27 @@ setup_building_variables() {
 
 	TARGET_OUT_DIR="${OUT_DIR}/${DEVICE_CODENAME}"
 
-	MAKE_FLAGS="O=${TARGET_OUT_DIR} ARCH=${ARCH} SUBARCH=${ARCH} -j$(nproc --all)"
+	MAKE_FLAGS=("O=${TARGET_OUT_DIR}" "ARCH=${ARCH}" "SUBARCH=${ARCH}" "-j$(nproc --all)")
 	if [ $ARCH = arm64 ]; then
-		MAKE_FLAGS="${MAKE_FLAGS} CROSS_COMPILE=aarch64-linux-android- CROSS_COMPILE_ARM32=arm-linux-androideabi-"
+		MAKE_FLAGS+=("CROSS_COMPILE=aarch64-linux-android-")
+		MAKE_FLAGS+=("CROSS_COMPILE_ARM32=arm-linux-androideabi-")
 	elif [ $ARCH = arm ]; then
-		MAKE_FLAGS="${MAKE_FLAGS} CROSS_COMPILE=arm-linux-androideabi-"
+		MAKE_FLAGS=("CROSS_COMPILE=arm-linux-androideabi-")
 	fi
 	if [ "${ENABLE_CCACHE}" = "true" ]; then
-		MAKE_FLAGS="${MAKE_FLAGS} CC=\"ccache ${TOOLCHAIN}\""
+		MAKE_FLAGS+=("CC=ccache ${TOOLCHAIN}")
 	else
-		MAKE_FLAGS="${MAKE_FLAGS} CC=\"${TOOLCHAIN}\""
+		MAKE_FLAGS+=("CC=${TOOLCHAIN}")
 	fi
 	if [ "${TOOLCHAIN}" = "clang" ]; then
 		if [ "${ARCH}" = arm64 ]; then
-			MAKE_FLAGS="${MAKE_FLAGS} CLANG_TRIPLE=aarch64-linux-gnu-"
+			MAKE_FLAGS+=("CLANG_TRIPLE=aarch64-linux-gnu-")
 		elif [ "${ARCH}" = arm ]; then
-			MAKE_FLAGS="${MAKE_FLAGS} CLANG_TRIPLE=arm-linux-gnu-"
+			MAKE_FLAGS+=("CLANG_TRIPLE=arm-linux-gnu-")
 		fi
 	fi
 	if [ "${LOCALVERSION}" != "" ]; then
-		MAKE_FLAGS="${MAKE_FLAGS} LOCALVERSION=$LOCALVERSION"
+		MAKE_FLAGS+=("LOCALVERSION=$LOCALVERSION")
 	fi
 }
 
