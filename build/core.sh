@@ -55,8 +55,12 @@ setup_building_variables() {
 	elif [ $ARCH = arm ]; then
 		MAKE_FLAGS="${MAKE_FLAGS} CROSS_COMPILE=arm-linux-androideabi-"
 	fi
+	if [ "${ENABLE_CCACHE}" = "true" ]; then
+		MAKE_FLAGS="${MAKE_FLAGS} CC=\"ccache ${TOOLCHAIN}\""
+	else
+		MAKE_FLAGS="${MAKE_FLAGS} CC=\"${TOOLCHAIN}\""
+	fi
 	if [ "${TOOLCHAIN}" = "clang" ]; then
-		MAKE_FLAGS="${MAKE_FLAGS} CC=clang"
 		if [ "${ARCH}" = arm64 ]; then
 			MAKE_FLAGS="${MAKE_FLAGS} CLANG_TRIPLE=aarch64-linux-gnu-"
 		elif [ "${ARCH}" = arm ]; then
