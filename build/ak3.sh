@@ -92,7 +92,7 @@ generate_ak3_zip() {
 
 	# Include build artifacts in anykernel3 zip
 	for i in $BUILD_ARTIFACTS; do
-		cp "${OUT_DIR}/arch/${ARCH}/boot/${i}" "${ANYKERNEL_DIR}/${i}"
+		cp "${TARGET_OUT_DIR}/arch/${ARCH}/boot/${i}" "${ANYKERNEL_DIR}/${i}"
 	done
 
 	cd "${ANYKERNEL_DIR}"

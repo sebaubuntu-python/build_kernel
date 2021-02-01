@@ -47,7 +47,9 @@ create_localversion() {
 setup_building_variables() {
 	export PATH="${CLANG_PATH}/bin:${GCC_AARCH64_PATH}/bin:${GCC_ARM_PATH}/bin:${PATH}"
 
-	MAKE_FLAGS="O=${OUT_DIR} ARCH=${ARCH} SUBARCH=${ARCH} -j$(nproc --all)"
+	TARGET_OUT_DIR="${OUT_DIR}/${DEVICE_CODENAME}"
+
+	MAKE_FLAGS="O=${TARGET_OUT_DIR} ARCH=${ARCH} SUBARCH=${ARCH} -j$(nproc --all)"
 	if [ $ARCH = arm64 ]; then
 		MAKE_FLAGS="${MAKE_FLAGS} CROSS_COMPILE=aarch64-linux-android- CROSS_COMPILE_ARM32=arm-linux-androideabi-"
 	elif [ $ARCH = arm ]; then
@@ -81,7 +83,7 @@ print_summary() {
 	echo    " Architecture: ${ARCH}                               "
 	echo    " Last commit: ${KERNEL_LAST_COMMIT}                  "
 	echo    " Sources directory: ${KERNEL_DIR}                    "
-	echo    " Output directory: ${OUT_DIR}                        "
+	echo    " Output directory: ${TARGET_OUT_DIR}                 "
 	echo    " Build user: ${KBUILD_BUILD_USER}                    "
 	echo    " Build machine: ${KBUILD_BUILD_HOST}                 "
 	echo    " Build started on: $(date -d @${BUILD_START})        "

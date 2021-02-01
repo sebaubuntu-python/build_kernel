@@ -59,7 +59,7 @@ create_localversion
 setup_building_variables
 clone_toolchain
 
-[ ! -d "${OUT_DIR}" ] && mkdir "${OUT_DIR}"
+[ ! -d "${TARGET_OUT_DIR}" ] && mkdir -p "${TARGET_OUT_DIR}"
 
 BUILD_START="$(date +'%s')"
 
@@ -68,7 +68,7 @@ print_summary
 # Clean
 if [ "${CLEAN}" = "true" ]; then
 	printf "Running command: make clean"
-	build clean &> "${OUT_DIR}/clean_log.txt"
+	build clean &> "${TARGET_OUT_DIR}/clean_log.txt"
 	CLEAN_SUCCESS=$?
 	if [ "${CLEAN_SUCCESS}" != 0 ]; then
 		echo "${red}Error: make clean failed${reset}"
@@ -78,7 +78,7 @@ if [ "${CLEAN}" = "true" ]; then
 	fi
 
 	printf "Running command: make mrproper"
-	build mrproper &> "${OUT_DIR}/mrproper_log.txt"
+	build mrproper &> "${TARGET_OUT_DIR}/mrproper_log.txt"
 	MRPROPER_SUCCESS=$?
 	if [ "${MRPROPER_SUCCESS}" != 0 ]; then
 		echo "${red}Error: make mrproper failed${reset}"
@@ -90,7 +90,7 @@ fi
 
 # Make defconfig
 printf "Running command: make ${DEFCONFIG}"
-build "${DEFCONFIG}" &> ${OUT_DIR}/defconfig_log.txt
+build "${DEFCONFIG}" &> ${TARGET_OUT_DIR}/defconfig_log.txt
 
 DEFCONFIG_SUCCESS=$?
 if [ "${DEFCONFIG_SUCCESS}" != 0 ]; then
@@ -103,11 +103,11 @@ fi
 if [ "${KERNEL_HEADERS}" != "true" ]; then
 	# Build kernel
 	echo "Running command: make"
-	build | tee "${OUT_DIR}/build_log.txt" | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
+	build | tee "${TARGET_OUT_DIR}/build_log.txt" | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
 else
 	# Build kernel headers
 	echo "Running command: make headers_install"
-	build headers_install | tee "${OUT_DIR}/build_log.txt" | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
+	build headers_install | tee "${TARGET_OUT_DIR}/build_log.txt" | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
 fi
 
 BUILD_SUCCESS=$?
