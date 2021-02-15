@@ -95,7 +95,7 @@ _build_target_ak3_zip() {
 	create_ak3_zip_filename
 
 	# Build a flashable zip using anykernel3
-	7z a "${ANYKERNEL_DIR}/${AK3_ZIP_NAME}" ${ANYKERNEL_DIR}/* > /dev/null
+	7z a "${TARGET_OUT_DIR}/${AK3_ZIP_NAME}" ${ANYKERNEL_DIR}/* > /dev/null
 
-	echo "Flashable zip: ${ANYKERNEL_DIR}/${AK3_ZIP_NAME}"
+	echo "Flashable zip: ${TARGET_OUT_DIR}/${AK3_ZIP_NAME}"
 }
