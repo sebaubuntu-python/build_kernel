@@ -50,10 +50,10 @@ setup_building_variables() {
 	TARGET_OUT_DIR="${OUT_DIR}/${DEVICE_CODENAME}"
 
 	MAKE_FLAGS=("O=${TARGET_OUT_DIR}" "ARCH=${ARCH}" "SUBARCH=${ARCH}" "-j$(nproc --all)")
-	if [ $ARCH = arm64 ]; then
+	if [ "${ARCH}" = arm64 ]; then
 		MAKE_FLAGS+=("CROSS_COMPILE=aarch64-linux-android-")
 		MAKE_FLAGS+=("CROSS_COMPILE_ARM32=arm-linux-androideabi-")
-	elif [ $ARCH = arm ]; then
+	elif [ "${ARCH}" = arm ]; then
 		MAKE_FLAGS=("CROSS_COMPILE=arm-linux-androideabi-")
 	fi
 	if [ "${ENABLE_CCACHE}" = "true" ]; then
