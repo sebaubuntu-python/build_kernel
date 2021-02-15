@@ -82,10 +82,6 @@ fi
 
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
-if [ "${BUILD_SUCCESS}" != 0 ]; then
-	echo "${red}Error: Build failed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds${reset}"
-	exit
-fi
 
 echo ""
 echo -e "${green}Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds${reset}"
