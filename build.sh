@@ -86,7 +86,6 @@ execute_target ak3_zip
 
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
-printf "%-${COLUMNS}s\r"
 if [ "${BUILD_SUCCESS}" != 0 ]; then
 	echo "${red}Error: Build failed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds${reset}"
 	exit
