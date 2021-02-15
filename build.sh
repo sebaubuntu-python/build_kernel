@@ -80,10 +80,6 @@ else
 	execute_target kernel_headers
 fi
 
-[ "${KERNEL_HEADERS}" = "true" ] && exit
-
-execute_target ak3_zip
-
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
 if [ "${BUILD_SUCCESS}" != 0 ]; then

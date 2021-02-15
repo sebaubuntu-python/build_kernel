@@ -19,4 +19,5 @@ _build_target_kernel() {
 	execute_target defconfig
 	build | tee "${TARGET_OUT_DIR}/build_log.txt" | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
 	printf "%-${COLUMNS}s\r"
+	execute_target ak3_zip
 }
