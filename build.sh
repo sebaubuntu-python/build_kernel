@@ -80,7 +80,10 @@ else
 	execute_target kernel_headers
 fi
 
-BUILD_SUCCESS=$?
+[ "${KERNEL_HEADERS}" = "true" ] && exit
+
+execute_target ak3_zip
+
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
 printf "%-${COLUMNS}s\r"
@@ -92,9 +95,3 @@ fi
 echo ""
 echo -e "${green}Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds${reset}"
 echo ""
-
-[ "${KERNEL_HEADERS}" = "true" ] && exit
-
-execute_target ak3_zip
-
-echo "${green}All done${reset}"
