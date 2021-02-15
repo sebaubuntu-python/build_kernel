@@ -19,7 +19,6 @@
 set -o pipefail
 
 source "build/core.sh"
-source "build/ak3.sh"
 source "build/variables.sh"
 source "${ROOT_DIR}/settings.conf"
 
@@ -96,6 +95,6 @@ echo ""
 
 [ "${KERNEL_HEADERS}" = "true" ] && exit
 
-generate_ak3_zip
+execute_target ak3_zip
 
 echo "${green}All done${reset}"

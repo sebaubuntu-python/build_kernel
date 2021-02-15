@@ -81,9 +81,7 @@ create_ak3_zip_filename() {
 	AK3_ZIP_NAME="${AK3_ZIP_NAME}.zip"
 }
 
-generate_ak3_zip() {
-	printf "Making flashable zip using anykernel3"
-
+_build_target_ak3_zip() {
 	cd "${ROOT_DIR}"
 
 	# Always reclone AK3
@@ -102,8 +100,6 @@ generate_ak3_zip() {
 
 	# Build a flashable zip using anykernel3
 	zip -r9 "${AK3_ZIP_NAME}" * -x .git/ README.md "${AK3_ZIP_NAME}" > /dev/null
-
-	echo ": done"
 
 	# Return to initial pwd
 	cd "${ROOT_DIR}"
