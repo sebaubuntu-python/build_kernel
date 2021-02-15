@@ -19,6 +19,7 @@
 ROOT_DIR="$(pwd)"
 ANYKERNEL_DIR="${ROOT_DIR}/anykernel3"
 BUILD_DIR="${ROOT_DIR}/build"
+TARGETS_DIR="${BUILD_DIR}/target"
 CONFIGS_DIR="${ROOT_DIR}/configs"
 KERNELS_DIR="${ROOT_DIR}/kernels"
 OUT_DIR="${ROOT_DIR}/out"
@@ -100,3 +101,13 @@ print_summary() {
 	echo -e "-----------------------------------------------------"
 }
 
+execute_target() {
+	echo "Running target: ${1}"
+	_build_target_${1}
+	local TARGET_SUCCESS=$?
+	if [ "${TARGET_SUCCESS}" != 0 ]; then
+		echo "${red}${1}: FAILED, error ${TARGET_SUCCESS}${reset}"
+		exit
+	fi
+	return "${TARGET_SUCCESS}"
+}

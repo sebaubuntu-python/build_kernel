@@ -23,6 +23,11 @@ source "build/ak3.sh"
 source "build/variables.sh"
 source "${ROOT_DIR}/settings.conf"
 
+# Source targets
+for target in $(ls "${TARGETS_DIR}"); do
+	source "${TARGETS_DIR}/${target}"
+done
+
 while [ "${#}" -gt 0 ]; do
 	case "${1}" in
 		-c | --clean )
@@ -67,47 +72,13 @@ print_summary
 
 # Clean
 if [ "${CLEAN}" = "true" ]; then
-	printf "Running command: make clean"
-	build clean &> "${TARGET_OUT_DIR}/clean_log.txt"
-	CLEAN_SUCCESS=$?
-	if [ "${CLEAN_SUCCESS}" != 0 ]; then
-		echo "${red}Error: make clean failed${reset}"
-		exit
-	else
-		echo ": done"
-	fi
-
-	printf "Running command: make mrproper"
-	build mrproper &> "${TARGET_OUT_DIR}/mrproper_log.txt"
-	MRPROPER_SUCCESS=$?
-	if [ "${MRPROPER_SUCCESS}" != 0 ]; then
-		echo "${red}Error: make mrproper failed${reset}"
-		exit
-	else
-		echo ": done"
-	fi
-fi
-
-# Make defconfig
-printf "Running command: make ${DEFCONFIG}"
-build "${DEFCONFIG}" &> ${TARGET_OUT_DIR}/defconfig_log.txt
-
-DEFCONFIG_SUCCESS=$?
-if [ "${DEFCONFIG_SUCCESS}" != 0 ]; then
-	echo "${red}Error: make ${DEFCONFIG} failed, specified a defconfig not present?${reset}"
-	exit
-else
-	echo ": done"
+	execute_target clean
 fi
 
 if [ "${KERNEL_HEADERS}" != "true" ]; then
-	# Build kernel
-	echo "Running command: make"
-	build | tee "${TARGET_OUT_DIR}/build_log.txt" | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
+	execute_target kernel
 else
-	# Build kernel headers
-	echo "Running command: make headers_install"
-	build headers_install | tee "${TARGET_OUT_DIR}/build_log.txt" | while read i; do printf "%-${COLUMNS}s\r" "$i"; done
+	execute_target kernel_headers
 fi
 
 BUILD_SUCCESS=$?
