@@ -82,8 +82,6 @@ create_ak3_zip_filename() {
 }
 
 _build_target_ak3_zip() {
-	cd "${ROOT_DIR}"
-
 	# Always reclone AK3
 	[ -d "${ANYKERNEL_DIR}" ] && rm -rf "${ANYKERNEL_DIR}"
 	git clone https://github.com/osm0sis/AnyKernel3 "${ANYKERNEL_DIR}" -q
@@ -93,16 +91,11 @@ _build_target_ak3_zip() {
 		cp "${TARGET_KERNEL_OUT_DIR}/arch/${ARCH}/boot/${i}" "${ANYKERNEL_DIR}/${i}"
 	done
 
-	cd "${ANYKERNEL_DIR}"
-
 	create_ak3_config
 	create_ak3_zip_filename
 
 	# Build a flashable zip using anykernel3
-	zip -r9 "${AK3_ZIP_NAME}" * -x .git/ README.md "${AK3_ZIP_NAME}" > /dev/null
-
-	# Return to initial pwd
-	cd "${ROOT_DIR}"
+	7z a "${ANYKERNEL_DIR}/${AK3_ZIP_NAME}" ${ANYKERNEL_DIR}/* > /dev/null
 
 	echo "Flashable zip: ${ANYKERNEL_DIR}/${AK3_ZIP_NAME}"
 }
