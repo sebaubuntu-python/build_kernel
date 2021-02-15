@@ -49,8 +49,9 @@ setup_building_variables() {
 	export PATH="${CLANG_PATH}/bin:${GCC_AARCH64_PATH}/bin:${GCC_ARM_PATH}/bin:${PATH}"
 
 	TARGET_OUT_DIR="${OUT_DIR}/${DEVICE_CODENAME}"
+	TARGET_KERNEL_OUT_DIR="${TARGET_OUT_DIR}/KERNEL_OBJ"
 
-	MAKE_FLAGS=("O=${TARGET_OUT_DIR}" "ARCH=${ARCH}" "SUBARCH=${ARCH}" "-j$(nproc --all)")
+	MAKE_FLAGS=("O=${TARGET_KERNEL_OUT_DIR}" "ARCH=${ARCH}" "SUBARCH=${ARCH}" "-j$(nproc --all)")
 	if [ "${ARCH}" = arm64 ]; then
 		MAKE_FLAGS+=("CROSS_COMPILE=aarch64-linux-android-")
 		MAKE_FLAGS+=("CROSS_COMPILE_ARM32=arm-linux-androideabi-")

@@ -63,7 +63,7 @@ create_localversion
 setup_building_variables
 clone_toolchain
 
-[ ! -d "${TARGET_OUT_DIR}" ] && mkdir -p "${TARGET_OUT_DIR}"
+[ ! -d "${TARGET_KERNEL_OUT_DIR}" ] && mkdir -p "${TARGET_KERNEL_OUT_DIR}"
 
 BUILD_START="$(date +'%s')"
 
