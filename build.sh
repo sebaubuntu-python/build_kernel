@@ -35,6 +35,9 @@ while [ "${#}" -gt 0 ]; do
 		--kernel-headers )
 			KERNEL_HEADERS="true"
 			;;
+		--modules )
+			MODULES="true"
+			;;
 		* )
 			PROJECT="${1}"
 			;;
@@ -78,6 +81,10 @@ if [ "${KERNEL_HEADERS}" != "true" ]; then
 	execute_target kernel
 else
 	execute_target kernel_headers
+fi
+
+if [ "${MODULES}" == "true" ]; then
+	execute_target modules
 fi
 
 BUILD_END=$(date +"%s")
