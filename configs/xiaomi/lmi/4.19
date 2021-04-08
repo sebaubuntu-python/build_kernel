@@ -1,6 +1,0 @@
-# Source common kernel config
-source "${CONFIGS_DIR}/xiaomi/sm8250-common/4.19"
-
-# Device info
-DEVICE_CODENAME=lmi
-DEFCONFIG=vendor/lmi_defconfig

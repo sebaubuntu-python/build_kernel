@@ -8,9 +8,9 @@
 
 ## Instructions
 
-- Add a config for your kernel in `configs/` (check the example config in configs/examples/example)
-- Add kernel sources in `kernels/`
-- `./build config [-c]`
+- Add a config for your kernel in `configs/vendor/codename.py` (check the example config in configs/examples/example.py)
+- Add kernel sources in `kernel/`
+- `python3 -m build_kernel vendor/codename [-c]`
 
 Arguments:
 

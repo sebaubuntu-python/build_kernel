@@ -1,6 +1,0 @@
-# Source common kernel config
-source "${CONFIGS_DIR}/asus/msm8937-common/3.18"
-
-# Device info
-DEVICE_CODENAME=X00I
-DEFCONFIG=X00I_defconfig

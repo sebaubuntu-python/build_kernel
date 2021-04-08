@@ -1,6 +1,0 @@
-# Source common kernel config
-source "${CONFIGS_DIR}/xiaomi/sdm660-common/4.14"
-
-# Device info
-DEVICE_CODENAME=whyred
-DEFCONFIG=whyred_defconfig
