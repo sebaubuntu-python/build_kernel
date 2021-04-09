@@ -8,7 +8,7 @@
 
 ## Instructions
 
-- Add a config for your kernel in `configs/vendor/codename.py` (check the example config in configs/examples/example.py)
+- Add a config for your kernel in `device/vendor/codename.py` (check the example config in device/examples/example.py)
 - Add kernel sources in `kernel/`
 - `python3 -m build_kernel vendor/codename [-c]`
 
