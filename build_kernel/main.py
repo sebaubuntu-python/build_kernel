@@ -11,6 +11,8 @@ def main(config_path: Path, clean=False):
 
 	print_summary(config)
 
+	(config.out_path / "KERNEL_OBJ").mkdir(exist_ok=True, parents=True)
+
 	if clean is True:
 		info("Cleaning before building")
 		make.run("clean")
