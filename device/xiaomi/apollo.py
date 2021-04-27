@@ -2,5 +2,5 @@
 from device.xiaomi.sm8250 import *
 
 # Device info
-CODENAME = "umi"
+CODENAME = "apollo"
 DEFCONFIG = f"vendor/{CODENAME}_defconfig"
