@@ -60,6 +60,8 @@ class Make:
 		if localversion != "":
 			self.make_flags += [f"LOCALVERSION={localversion}"]
 
+		self.make_flags += config.additional_make_flags
+
 		# Clone toolchains if needed
 		for toolchain in ["clang", "gcc"]:
 			toolchain_path = prebuilts_path / toolchain

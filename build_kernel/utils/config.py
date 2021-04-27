@@ -26,6 +26,10 @@ class Config:
 		self.build_artifacts = config.BUILD_ARTIFACTS
 		self.toolchain = config.TOOLCHAIN
 		self.out_path = out_path / self.codename
+		try:
+			self.additional_make_flags = config.ADDITIONAL_MAKE_FLAGS
+		except AttributeError:
+			self.additional_make_flags = []
 
 def load_config_module(config_path: Path):
 	spec = spec_from_file_location("config", device_path / f"{config_path}.py")
