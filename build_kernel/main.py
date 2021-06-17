@@ -26,6 +26,6 @@ def main(config_path: Path, clean=False):
 
 	info("Creating AnyKernel3 zip")
 	ak3manager = AK3Manager(config)
-	ak3manager.create_ak3_zip()
+	zip_filename = ak3manager.create_ak3_zip()
 
-	info("Build completed successfully")
+	info(f"Build completed successfully: {zip_filename}")

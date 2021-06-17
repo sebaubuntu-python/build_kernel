@@ -82,7 +82,11 @@ class AK3Manager:
 		with open(self.path / "anykernel.sh", 'w') as f:
 			f.write(self.get_ak3_config())
 
-		make_archive(self.config.out_path / self.get_ak3_zip_filename(), 'zip', self.path)
+		zip_filename = self.config.out_path / self.get_ak3_zip_filename()
+
+		make_archive(zip_filename, 'zip', self.path)
+
+		return f"{zip_filename}.zip"
 
 	def get_ak3_config(self):
 		is_ab = '1' if self.config.is_ab else '0'
