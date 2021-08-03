@@ -4,7 +4,7 @@ from device.qcom.sdm845 import *
 KERNEL_PATH = "kernel/lenovo/sdm710"
 
 # Device info
-CODENAME = "kunlun2"
+CODENAME = "jd2019"
 DEFCONFIG = f"{CODENAME}_defconfig"
 
 ARCH = "arm64"
