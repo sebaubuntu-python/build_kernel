@@ -1,5 +1,5 @@
-from build_kernel import prebuilts_path, get_config
-from build_kernel.utils.config import Config
+from build_kernel import prebuilts_path, get_config, root_path, out_path
+from build_kernel.utils.device import Device
 from build_kernel.utils.logging import LOGI
 from git import Repo
 from multiprocessing import cpu_count
@@ -16,22 +16,27 @@ GCC_AARCH64_PATH = GCC_PATH / "aarch64" / f"aarch64-linux-android-{GCC_VERSION}"
 GCC_ARM_PATH = GCC_PATH / "arm" / f"arm-linux-androideabi-{GCC_VERSION}"
 
 class Make:
-	def __init__(self, config: Config):
-		self.config = config
+	def __init__(self, device: Device):
+		self.device = device
+
+		self.kernel_source = root_path / self.device.TARGET_KERNEL_SOURCE
 
 		# Create environment variables
 		self.env_vars = os.environ.copy()
 		self.env_vars['PATH'] = f"{CLANG_PATH}/bin:{GCC_AARCH64_PATH}/bin:{GCC_ARM_PATH}/bin:{self.env_vars['PATH']}"
 
+		self.out_path = out_path / device.PRODUCT_DEVICE / "KERNEL_OBJ"
+		self.out_path.mkdir(exist_ok=True, parents=True)
+
 		# Create Make flags
 		self.make_flags = [
-			f"O={config.out_path}/KERNEL_OBJ",
-			f"ARCH={config.arch}",
-			f"SUBARCH={config.arch}",
+			f"O={self.out_path}",
+			f"ARCH={device.TARGET_ARCH}",
+			f"SUBARCH={device.TARGET_ARCH}",
 			f"-j{cpu_count()}",
 		]
 
-		if config.arch == "arm64":
+		if device.TARGET_ARCH == "arm64":
 			self.make_flags.append("CROSS_COMPILE=aarch64-linux-android-")
 			self.make_flags.append("CROSS_COMPILE_ARM32=arm-linux-androideabi-")
 		else:
@@ -42,7 +47,7 @@ class Make:
 		else:
 			self.make_flags.append(f"CC=clang")
 
-		if config.arch == "arm64":
+		if device.TARGET_ARCH == "arm64":
 			self.make_flags.append("CLANG_TRIPLE=aarch64-linux-gnu-")
 		else:
 			self.make_flags.append("CLANG_TRIPLE=arm-linux-gnu-")
@@ -58,7 +63,7 @@ class Make:
 		if localversion:
 			self.make_flags.append(f"LOCALVERSION={localversion}")
 
-		self.make_flags += config.additional_make_flags
+		self.make_flags += device.TARGET_ADDITIONAL_MAKE_FLAGS
 
 		# Clone toolchains if needed
 		for toolchain in ["clang", "gcc"]:
@@ -78,7 +83,7 @@ class Make:
 			command.append(target)
 
 		process = Popen(command, env=self.env_vars, stdout=PIPE, stderr=STDOUT,
-						cwd=self.config.kernel_path, encoding="UTF-8")
+						cwd=self.kernel_source, encoding="UTF-8")
 		while True:
 			output = process.stdout.readline()
 			if output == '' and process.poll() is not None:

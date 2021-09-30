@@ -1,9 +1,5 @@
-from device.qcom.sm8250 import *
+from device.qcom.sm8250 import QcomSM8250Device
 
-# Kernel sources folder name
-KERNEL_PATH = "kernel/xiaomi/sm8250"
-
-# Device info
-ARCH = "arm64"
-IS_AB = False
-HAS_RAMDISK = True
+class XiaomiSM8250Device(QcomSM8250Device):
+	TARGET_ARCH = "arm64"
+	TARGET_KERNEL_SOURCE = "kernel/xiaomi/sm8250"

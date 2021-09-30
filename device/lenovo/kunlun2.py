@@ -1,12 +1,8 @@
-from device.qcom.sdm845 import *
+from build_kernel.utils.device import register_device
+from device.lenovo.sdm710 import LenovoSDM710Device
 
-# Kernel sources folder name
-KERNEL_PATH = "kernel/lenovo/sdm710"
+class LenovoKunlun2Device(LenovoSDM710Device):
+	PRODUCT_DEVICE = "kunlun2"
+	TARGET_KERNEL_CONFIG = f"{PRODUCT_DEVICE}_defconfig"
 
-# Device info
-CODENAME = "kunlun2"
-DEFCONFIG = f"{CODENAME}_defconfig"
-
-ARCH = "arm64"
-IS_AB = False
-HAS_RAMDISK = False
+register_device(LenovoKunlun2Device)

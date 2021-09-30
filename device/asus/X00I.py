@@ -1,6 +1,8 @@
-# Source common kernel config
-from device.asus.msm8937 import *
+from build_kernel.utils.device import register_device
+from device.asus.msm8937 import AsusMSM8937Device
 
-# Device info
-CODENAME = "X00I"
-DEFCONFIG = f"{CODENAME}_defconfig"
+class AsusX00IDevice(AsusMSM8937Device):
+	PRODUCT_DEVICE = "X00I"
+	TARGET_KERNEL_CONFIG = f"{PRODUCT_DEVICE}_defconfig"
+
+register_device(AsusX00IDevice)

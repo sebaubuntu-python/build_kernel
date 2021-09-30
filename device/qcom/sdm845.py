@@ -2,10 +2,7 @@
 Common configuration for sdm845/sdm710 devices
 """
 
-from device.qcom.common import *
+from build_kernel.utils.device import Device
 
-# sdm845/sdm710 uses 4.9
-KERNEL_VERSION = "4.9"
-
-# sdm845/sdm710 uses v1 boot header
-BUILD_ARTIFACTS = ["Image.gz-dtb", "dtbo.img"]
+class QcomSDM845Device(Device):
+	TARGET_BUILD_ARTIFACTS = ["Image.gz-dtb", "dtbo.img"]

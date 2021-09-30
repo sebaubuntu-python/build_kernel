@@ -1,9 +1,5 @@
-from device.qcom.msm8998 import *
+from device.qcom.msm8998 import QcomMSM8998Device
 
-# Kernel sources folder name
-KERNEL_PATH = "kernel/xiaomi/sdm660"
-
-# Device info
-ARCH = "arm64"
-IS_AB = False
-HAS_RAMDISK = True
+class XiaomiSDM660Device(QcomMSM8998Device):
+	TARGET_ARCH = "arm64"
+	TARGET_KERNEL_SOURCE = "kernel/xiaomi/sdm660"

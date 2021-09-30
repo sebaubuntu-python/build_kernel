@@ -1,3 +1,4 @@
+from build_kernel.utils.device import register_devices
 from dotenv import load_dotenv
 import os
 from pathlib import Path
@@ -16,3 +17,4 @@ prebuilts_path = root_path / "prebuilts"
 get_config = os.environ.get
 
 load_dotenv(root_path / "config.env")
+register_devices(device_path)

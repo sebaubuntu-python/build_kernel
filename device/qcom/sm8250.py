@@ -1,11 +1,8 @@
 """
-Common configuration for sm8250 devices
+Common configuration for sm8250/sm7250 devices
 """
 
-from device.qcom.common import *
+from build_kernel.utils.device import Device
 
-# sm8250 uses 4.19
-KERNEL_VERSION = "4.19"
-
-# sm8250 uses v2 boot header
-BUILD_ARTIFACTS = ["Image", "dtb.img", "dtbo.img"]
+class QcomSM8250Device(Device):
+	TARGET_BUILD_ARTIFACTS = ["Image", "dtb.img", "dtbo.img"]

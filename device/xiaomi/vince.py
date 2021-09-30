@@ -1,9 +1,8 @@
-# Source common kernel config
-from device.xiaomi.msm8953 import *
+from build_kernel.utils.device import register_device
+from device.xiaomi.msm8953 import XiaomiMSM8953Device
 
-# Device info
-CODENAME = "vince"
-DEFCONFIG = f"{CODENAME}_defconfig"
+class XiaomiVinceDevice(XiaomiMSM8953Device):
+	PRODUCT_DEVICE = "vince"
+	TARGET_KERNEL_CONFIG = f"{PRODUCT_DEVICE}_defconfig"
 
-IS_AB = False
-HAS_RAMDISK = True
+register_device(XiaomiVinceDevice)

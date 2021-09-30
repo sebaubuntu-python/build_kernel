@@ -1,9 +1,6 @@
-from device.qcom.msm8996 import *
+from device.qcom.msm8996 import QcomMSM8996Device
 
-# Kernel sources folder name
-KERNEL_PATH = "kernel/asus/msm8937"
-
-# Device info
-ARCH = "arm64"
-IS_AB = False
-HAS_RAMDISK = False
+class AsusMSM8937Device(QcomMSM8996Device):
+	TARGET_ARCH = "arm64"
+	TARGET_KERNEL_SOURCE = "kernel/asus/msm8937"
+	BOARD_BUILD_SYSTEM_ROOT_IMAGE = True

@@ -1,5 +1,5 @@
-from build_kernel import get_config
-from build_kernel.utils.config import Config
+from build_kernel import get_config, out_path
+from build_kernel.utils.device import Device
 from build_kernel.utils.logging import LOGI
 from datetime import date
 from git import Repo
@@ -21,10 +21,10 @@ do.modules=0
 do.systemless=1
 do.cleanup=1
 do.cleanuponabort=0
-device.name1={config.codename}
+device.name1={device.PRODUCT_DEVICE}
 '; }}
 # shell variables
-block={config.block_device};
+block={device.TARGET_BLOCK_DEVICE};
 is_slot_device={is_ab};
 ramdisk_compression=auto;
 ## AnyKernel methods (DO NOT CHANGE)
@@ -54,9 +54,11 @@ def handle_remove_readonly(func, path, _):
 	func(path)
 
 class AK3Manager:
-	def __init__(self, config: Config):
-		self.config = config
-		self.path = config.out_path / "ANYKERNEL_OBJ"
+	def __init__(self, device: Device):
+		self.device = device
+
+		self.device_out_path = out_path / self.device.PRODUCT_DEVICE
+		self.path = self.device_out_path / "ANYKERNEL_OBJ"
 		self.kernel_name = get_config("COMMON_KERNEL_NAME")
 		self.kernel_version = get_config("COMMON_KERNEL_VERSION")
 
@@ -66,14 +68,13 @@ class AK3Manager:
 		Repo.clone_from(ANYKERNEL3_REMOTE, self.path, single_branch=True, depth=1)
 
 	def create_ak3_zip(self):
-		artifacts = self.config.out_path / "KERNEL_OBJ" / "arch" / self.config.arch / "boot"
+		artifacts = self.device_out_path / "KERNEL_OBJ" / "arch" / self.device.TARGET_ARCH / "boot"
 		file_found = False
-		for artifact in self.config.build_artifacts:
-			artifact_path = artifacts / artifact
-			if not artifact_path.is_file():
+		for artifact in [artifacts / artifact for artifact in self.device.TARGET_BUILD_ARTIFACTS]:
+			if not artifact.is_file():
 				continue
 			file_found = True
-			copyfile(artifact_path, self.path / artifact)
+			copyfile(artifact, self.path / artifact.name)
 
 		if file_found is False:
 			LOGI("No artifact found, skipping AK3 zip creation")
@@ -82,23 +83,25 @@ class AK3Manager:
 		with open(self.path / "anykernel.sh", 'w') as f:
 			f.write(self.get_ak3_config())
 
-		zip_filename = self.config.out_path / self.get_ak3_zip_filename()
+		zip_filename = self.device_out_path / self.get_ak3_zip_filename()
 
 		make_archive(zip_filename, 'zip', self.path)
 
 		return f"{zip_filename}.zip"
 
 	def get_ak3_config(self):
-		is_ab = '1' if self.config.is_ab else '0'
-		flash_procedure = FLASH_PROCEDURE_RAMDISK if self.config.has_ramdisk else FLASH_PROCEDURE_NO_RAMDISK
+		is_ab = '1' if self.device.AB_OTA_UPDATER else '0'
+		flash_procedure = (FLASH_PROCEDURE_RAMDISK
+		                   if self.device.BOARD_BUILD_SYSTEM_ROOT_IMAGE
+		                   else FLASH_PROCEDURE_NO_RAMDISK)
 
-		text = AK3_CONFIG.format(config=self.config, kernel_name=self.kernel_name,
+		text = AK3_CONFIG.format(device=self.device, kernel_name=self.kernel_name,
 								 is_ab=is_ab, flash_procedure=flash_procedure)
 		return text
 
 	def get_ak3_zip_filename(self):
 		filename = [self.kernel_name if self.kernel_name != "" else "kernel"]
-		filename += [self.config.codename, self.kernel_version]
+		filename += [self.device.PRODUCT_DEVICE, self.kernel_version]
 		if get_config("INCLUDE_DATE_IN_ZIP_FILENAME") == "true":
 			filename += [date.today().strftime('%Y%m%d')]
 

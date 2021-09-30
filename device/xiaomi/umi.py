@@ -1,6 +1,8 @@
-# Source common kernel config
-from device.xiaomi.sm8250 import *
+from build_kernel.utils.device import register_device
+from device.xiaomi.sm8250 import XiaomiSM8250Device
 
-# Device info
-CODENAME = "umi"
-DEFCONFIG = f"vendor/{CODENAME}_defconfig"
+class XiaomiUmiDevice(XiaomiSM8250Device):
+	PRODUCT_DEVICE = "umi"
+	TARGET_KERNEL_CONFIG = f"vendor/{PRODUCT_DEVICE}_defconfig"
+
+register_device(XiaomiUmiDevice)

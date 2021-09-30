@@ -1,6 +1,8 @@
-# Source common kernel config
-from device.xiaomi.sdm660 import *
+from build_kernel.utils.device import register_device
+from device.xiaomi.sdm660 import XiaomiSDM660Device
 
-# Device info
-CODENAME = "whyred"
-DEFCONFIG = f"{CODENAME}_defconfig"
+class XiaomiWhyredDevice(XiaomiSDM660Device):
+	PRODUCT_DEVICE = "whyred"
+	TARGET_KERNEL_CONFIG = f"{PRODUCT_DEVICE}_defconfig"
+
+register_device(XiaomiWhyredDevice)

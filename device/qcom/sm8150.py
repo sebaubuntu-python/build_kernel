@@ -2,10 +2,7 @@
 Common configuration for sm8150/sm6150/sm6250 devices
 """
 
-from device.qcom.common import *
+from build_kernel.utils.device import Device
 
-# sm8150/sm6150/sm6250 uses 4.14
-KERNEL_VERSION = "4.14"
-
-# sm8150/sm6150/sm6250 uses v2 boot header
-BUILD_ARTIFACTS = ["Image", "dtb.img", "dtbo.img"]
+class QcomSM8150Device(Device):
+	TARGET_BUILD_ARTIFACTS = ["Image", "dtb.img", "dtbo.img"]

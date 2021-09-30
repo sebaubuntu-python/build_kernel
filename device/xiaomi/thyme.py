@@ -1,6 +1,9 @@
-# Source common kernel config
-from device.xiaomi.sm8250 import *
+from build_kernel.utils.device import register_device
+from device.xiaomi.sm8250 import XiaomiSM8250Device
 
-# Device info
-CODENAME = "thyme"
-DEFCONFIG = f"vendor/{CODENAME}_defconfig"
+class XiaomiThymeDevice(XiaomiSM8250Device):
+	PRODUCT_DEVICE = "thyme"
+	TARGET_KERNEL_CONFIG = f"vendor/{PRODUCT_DEVICE}_defconfig"
+	AB_OTA_UPDATER = True
+
+register_device(XiaomiThymeDevice)
