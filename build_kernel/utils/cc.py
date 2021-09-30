@@ -5,7 +5,6 @@ from git import Repo
 from multiprocessing import cpu_count
 import os
 from subprocess import Popen, PIPE, STDOUT
-from typing import Optional
 
 TOOLCHAINS_REMOTE = "https://github.com/SebaUbuntu/android-kernel-builder"
 CLANG_VERSION = "r383902b"
@@ -31,23 +30,23 @@ class Make:
 			f"SUBARCH={config.arch}",
 			f"-j{cpu_count()}",
 		]
-		self.make_flags += [
-			"CROSS_COMPILE=aarch64-linux-android-",
-			"CROSS_COMPILE_ARM32=arm-linux-androideabi-"
-		] if config.arch == "arm64" else [
-			"CROSS_COMPILE=arm-linux-androideabi-"
-		]
-		self.make_flags += [
-			f"CC=ccache {config.toolchain}"
-		] if get_config("ENABLE_CCACHE") == "true" else [
-			f"CC={config.toolchain}"
-		]
+
+		if config.arch == "arm64":
+			self.make_flags.append("CROSS_COMPILE=aarch64-linux-android-")
+			self.make_flags.append("CROSS_COMPILE_ARM32=arm-linux-androideabi-")
+		else:
+			self.make_flags.append("CROSS_COMPILE=arm-linux-androideabi-")
+
+		if get_config("ENABLE_CCACHE") == "true":
+			self.make_flags.append(f"CC=ccache {config.toolchain}")
+		else:
+			self.make_flags.append(f"CC={config.toolchain}")
+
 		if config.toolchain == "clang":
-			self.make_flags += [
-				"CLANG_TRIPLE=aarch64-linux-gnu-"
-			] if config.arch == "arm64" else [
-				"CLANG_TRIPLE=arm-linux-gnu-"
-			]
+			if config.arch == "arm64":
+				self.make_flags.append("CLANG_TRIPLE=aarch64-linux-gnu-")
+			else:
+				self.make_flags.append("CLANG_TRIPLE=arm-linux-gnu-")
 
 		localversion = ""
 		kernel_name = get_config("COMMON_KERNEL_NAME")
@@ -57,8 +56,8 @@ class Make:
 		if kernel_version != "":
 			localversion += f"-{kernel_version}"
 
-		if localversion != "":
-			self.make_flags += [f"LOCALVERSION={localversion}"]
+		if localversion:
+			self.make_flags.append(f"LOCALVERSION={localversion}")
 
 		self.make_flags += config.additional_make_flags
 
@@ -73,7 +72,7 @@ class Make:
 							single_branch=True, depth=1)
 			LOGI("Cloning finished")
 
-	def run(self, target: Optional[str]=None):
+	def run(self, target: str = None):
 		command = ["make"]
 		command.extend(self.make_flags)
 		if target is not None:
@@ -89,7 +88,10 @@ class Make:
 				print(output.strip())
 		rc = process.poll()
 		if rc != 0:
-			make_command = f'make {target}' if target is not None else 'make'
+			make_command = "make"
+			if target is not None:
+				make_command += f" {target}"
+
 			raise RuntimeError(f"{make_command} failed, return code {rc}")
 
 		return rc
