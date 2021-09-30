@@ -12,7 +12,6 @@ class Config:
 	has_ramdisk: bool
 	block_device: str
 	build_artifacts: list[str]
-	toolchain: str
 
 	def __init__(self, config):
 		self.codename = config.CODENAME
@@ -24,7 +23,6 @@ class Config:
 		self.has_ramdisk = config.HAS_RAMDISK
 		self.block_device = config.BLOCK_DEVICE
 		self.build_artifacts = config.BUILD_ARTIFACTS
-		self.toolchain = config.TOOLCHAIN
 		self.out_path = out_path / self.codename
 		try:
 			self.additional_make_flags = config.ADDITIONAL_MAKE_FLAGS

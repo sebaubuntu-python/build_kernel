@@ -20,6 +20,3 @@ KERNEL_PATH = "example"
 
 # Building artifacts list (e.g. ["Image", "dtb.img"], or ["Image.gz-dtb"])
 BUILD_ARTIFACTS = ["Image.gz-dtb"]
-
-# Cross-compiler (gcc or clang)
-TOOLCHAIN = "clang"

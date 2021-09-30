@@ -9,6 +9,3 @@ KERNEL_VERSION = "4.19"
 
 # sm8250 uses v2 boot header
 BUILD_ARTIFACTS = ["Image", "dtb.img", "dtbo.img"]
-
-# Cross-compiler (gcc or clang)
-TOOLCHAIN = "clang"

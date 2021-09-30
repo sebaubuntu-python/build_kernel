@@ -38,15 +38,14 @@ class Make:
 			self.make_flags.append("CROSS_COMPILE=arm-linux-androideabi-")
 
 		if get_config("ENABLE_CCACHE") == "true":
-			self.make_flags.append(f"CC=ccache {config.toolchain}")
+			self.make_flags.append(f"CC=ccache clang")
 		else:
-			self.make_flags.append(f"CC={config.toolchain}")
+			self.make_flags.append(f"CC=clang")
 
-		if config.toolchain == "clang":
-			if config.arch == "arm64":
-				self.make_flags.append("CLANG_TRIPLE=aarch64-linux-gnu-")
-			else:
-				self.make_flags.append("CLANG_TRIPLE=arm-linux-gnu-")
+		if config.arch == "arm64":
+			self.make_flags.append("CLANG_TRIPLE=aarch64-linux-gnu-")
+		else:
+			self.make_flags.append("CLANG_TRIPLE=arm-linux-gnu-")
 
 		localversion = ""
 		kernel_name = get_config("COMMON_KERNEL_NAME")

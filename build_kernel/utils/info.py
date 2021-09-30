@@ -10,7 +10,6 @@ def print_summary(config: Config):
 		f"OUT_DIR={config.out_path}",
 		f"BUILD_USER={get_config('KBUILD_BUILD_USER')}",
 		f"BUILD_HOST={get_config('KBUILD_BUILD_HOST')}",
-		f"TOOLCHAIN={config.toolchain}",
 		f"CCACHE={get_config('ENABLE_CCACHE')}",
 		"============================================",
 	]))

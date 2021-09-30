@@ -9,6 +9,3 @@ KERNEL_VERSION = "3.10"
 
 # msm8916 uses v0 boot header
 BUILD_ARTIFACTS = ["zImage", "dt.img"]
-
-# Cross-compiler (gcc or clHAHAHAHAHAHAHA)
-TOOLCHAIN = "gcc"

@@ -11,6 +11,3 @@ KERNEL_VERSION = "4.4"
 
 # msm8998/sdm660 uses v0 boot header
 BUILD_ARTIFACTS = ["Image.gz-dtb"]
-
-# Cross-compiler (gcc or clang)
-TOOLCHAIN = "clang"
