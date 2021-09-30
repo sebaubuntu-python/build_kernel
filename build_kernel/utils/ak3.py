@@ -1,8 +1,8 @@
 from build_kernel import get_config
 from build_kernel.utils.config import Config
+from build_kernel.utils.logging import LOGI
 from datetime import date
 from git import Repo
-from logging import info
 from pathlib import Path
 from shutil import copyfile, rmtree, make_archive
 from stat import S_IWRITE
@@ -76,7 +76,7 @@ class AK3Manager:
 			copyfile(artifact_path, self.path / artifact)
 
 		if file_found is False:
-			info("No artifact found, skipping AK3 zip creation")
+			LOGI("No artifact found, skipping AK3 zip creation")
 			return
 
 		with open(self.path / "anykernel.sh", 'w') as f:

@@ -1,7 +1,7 @@
 from build_kernel import prebuilts_path, get_config
 from build_kernel.utils.config import Config
+from build_kernel.utils.logging import LOGI
 from git import Repo
-from logging import info
 from multiprocessing import cpu_count
 import os
 from subprocess import Popen, PIPE, STDOUT
@@ -68,10 +68,10 @@ class Make:
 			if toolchain_path.is_dir():
 				continue
 
-			info(f"Cloning toolchain: {toolchain}")
+			LOGI(f"Cloning toolchain: {toolchain}")
 			Repo.clone_from(TOOLCHAINS_REMOTE, toolchain_path, branch=f"prebuilts-{toolchain}",
 							single_branch=True, depth=1)
-			info("Cloning finished")
+			LOGI("Cloning finished")
 
 	def run(self, target: Optional[str]=None):
 		command = ["make"]

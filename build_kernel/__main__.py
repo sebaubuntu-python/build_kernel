@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 from argparse import ArgumentParser
-from build_kernel.utils.logging import setup_logging
 from build_kernel.main import main
 from pathlib import Path
 
@@ -17,7 +16,5 @@ if __name__ == '__main__':
 						help="verbose logging")
 
 	args = parser.parse_args()
-
-	setup_logging(args.verbose)
 
 	main(args.config, clean=args.clean)
