@@ -1,4 +1,5 @@
-from build_kernel import prebuilts_path, get_config, root_path, out_path
+from build_kernel import prebuilts_path, root_path, out_path
+from build_kernel.utils.config import get_config
 from build_kernel.utils.device import Device
 from build_kernel.utils.logging import LOGI
 from git import Repo
@@ -14,6 +15,12 @@ CLANG_PATH = prebuilts_path / "clang" / "linux-x86" / f"clang-{CLANG_VERSION}"
 GCC_PATH = prebuilts_path / "gcc" / "linux-x86"
 GCC_AARCH64_PATH = GCC_PATH / "aarch64" / f"aarch64-linux-android-{GCC_VERSION}"
 GCC_ARM_PATH = GCC_PATH / "arm" / f"arm-linux-androideabi-{GCC_VERSION}"
+
+ENABLE_CCACHE = get_config("build.enable_ccache", False)
+KERNEL_NAME = get_config("build.kernel_name")
+KERNEL_VERSION = get_config("build.kernel_version")
+KBUILD_BUILD_USER = get_config("build.kbuild_build_user")
+KBUILD_BUILD_HOST = get_config("build.kbuild_build_host")
 
 class Make:
 	def __init__(self, device: Device):
@@ -42,7 +49,7 @@ class Make:
 		else:
 			self.make_flags.append("CROSS_COMPILE=arm-linux-androideabi-")
 
-		if get_config("ENABLE_CCACHE") == "true":
+		if ENABLE_CCACHE:
 			self.make_flags.append(f"CC=ccache clang")
 		else:
 			self.make_flags.append(f"CC=clang")
@@ -53,15 +60,18 @@ class Make:
 			self.make_flags.append("CLANG_TRIPLE=arm-linux-gnu-")
 
 		localversion = ""
-		kernel_name = get_config("COMMON_KERNEL_NAME")
-		kernel_version = get_config("COMMON_KERNEL_VERSION")
-		if kernel_name != "":
-			localversion += f"-{kernel_name}"
-		if kernel_version != "":
-			localversion += f"-{kernel_version}"
+		if KERNEL_NAME:
+			localversion += f"-{KERNEL_NAME}"
+		if KERNEL_VERSION:
+			localversion += f"-{KERNEL_VERSION}"
 
 		if localversion:
 			self.make_flags.append(f"LOCALVERSION={localversion}")
+
+		if KBUILD_BUILD_USER:
+			self.make_flags.append(f"KBUILD_BUILD_USER={KBUILD_BUILD_USER}")
+		if KBUILD_BUILD_HOST:
+			self.make_flags.append(f"KBUILD_BUILD_HOST={KBUILD_BUILD_HOST}")
 
 		self.make_flags += device.TARGET_ADDITIONAL_MAKE_FLAGS
 

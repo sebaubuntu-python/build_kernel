@@ -1,20 +1,18 @@
 from argparse import ArgumentParser
-from build_kernel import out_path
 from build_kernel.utils.ak3 import AK3Manager
 from build_kernel.utils.cc import Make
 from build_kernel.utils.device import devices
 from build_kernel.utils.info import print_summary
-from build_kernel.utils.logging import LOGE, LOGI
+from build_kernel.utils.logging import LOGE, LOGI, setup_logging
 
 def main():
+	setup_logging()
+
 	parser = ArgumentParser(prog='python3 -m kernel_build')
 
-	parser.add_argument("device", type=str,
-						help="device codename")
-	parser.add_argument("-c", "--clean", action='store_true',
-						help="clean before building")
-	parser.add_argument("-v", "--verbose", action='store_true',
-						help="verbose logging")
+	parser.add_argument("device", type=str, help="device codename")
+	parser.add_argument("-c", "--clean", action='store_true', help="clean before building")
+	parser.add_argument("-v", "--verbose", action='store_true', help="verbose logging")
 
 	args = parser.parse_args()
 

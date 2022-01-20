@@ -1,8 +1,9 @@
 from logging import basicConfig, INFO, debug, error, info, warning
 import traceback
 
-basicConfig(format='[%(filename)s:%(lineno)s %(levelname)s] %(funcName)s: %(message)s',
-            level=INFO)
+def setup_logging(level = INFO):
+	basicConfig(format='[%(filename)s:%(lineno)s %(levelname)s] %(funcName)s: %(message)s',
+	            level=level)
 
 LOGD = debug
 LOGE = error

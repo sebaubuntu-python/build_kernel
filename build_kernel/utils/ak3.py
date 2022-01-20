@@ -1,4 +1,6 @@
-from build_kernel import get_config, out_path
+from build_kernel import out_path
+from build_kernel.utils.cc import KERNEL_NAME, KERNEL_VERSION
+from build_kernel.utils.config import get_config
 from build_kernel.utils.device import Device
 from build_kernel.utils.logging import LOGI
 from datetime import date
@@ -48,6 +50,7 @@ flash_boot;
 flash_dtbo;
 """
 
+INCLUDE_DATE_IN_ZIP_FILENAME = get_config("ak3.include_date_in_zip_filename", False)
 
 def handle_remove_readonly(func, path, _):
 	Path(path).chmod(S_IWRITE)
@@ -59,8 +62,6 @@ class AK3Manager:
 
 		self.device_out_path = out_path / self.device.PRODUCT_DEVICE
 		self.path = self.device_out_path / "ANYKERNEL_OBJ"
-		self.kernel_name = get_config("COMMON_KERNEL_NAME")
-		self.kernel_version = get_config("COMMON_KERNEL_VERSION")
 
 		if self.path.is_dir():
 			rmtree(self.path, ignore_errors=False, onerror=handle_remove_readonly)
@@ -95,14 +96,16 @@ class AK3Manager:
 		                   if self.device.BOARD_BUILD_SYSTEM_ROOT_IMAGE
 		                   else FLASH_PROCEDURE_NO_RAMDISK)
 
-		text = AK3_CONFIG.format(device=self.device, kernel_name=self.kernel_name,
+		text = AK3_CONFIG.format(device=self.device, kernel_name=KERNEL_NAME,
 								 is_ab=is_ab, flash_procedure=flash_procedure)
 		return text
 
 	def get_ak3_zip_filename(self):
-		filename = [self.kernel_name if self.kernel_name != "" else "kernel"]
-		filename += [self.device.PRODUCT_DEVICE, self.kernel_version]
-		if get_config("INCLUDE_DATE_IN_ZIP_FILENAME") == "true":
+		filename = [KERNEL_NAME if KERNEL_NAME else "kernel"]
+		filename.append(self.device.PRODUCT_DEVICE)
+		if KERNEL_VERSION:
+			filename.append(f"v{KERNEL_VERSION}")
+		if INCLUDE_DATE_IN_ZIP_FILENAME:
 			filename += [date.today().strftime('%Y%m%d')]
 
 		return "-".join(filename)
