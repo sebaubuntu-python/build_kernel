@@ -6,7 +6,7 @@ Little build system to build Android kernel sources
 - Managed with config files
 - Automatic AnyKernel3 packing
 
-Note: Requires Python 3.9
+Note: Requires Python 3.9 and the filesize is about 500MB+
 
 ## Installation
 
