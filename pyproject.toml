@@ -6,7 +6,7 @@ authors = ["Sebastiano Barezzi <barezzisebastiano@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-GitPython = "^3.1.26"
+GitPython = "^3.1.27"
 
 [tool.poetry.dev-dependencies]
 
