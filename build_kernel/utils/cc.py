@@ -6,6 +6,7 @@ from git import Repo
 from multiprocessing import cpu_count
 import os
 from subprocess import Popen, PIPE, STDOUT
+from typing import Union
 
 TOOLCHAINS_REMOTE = "https://github.com/SebaUbuntu/android-kernel-builder"
 CLANG_VERSION = "r383902b"
@@ -86,11 +87,14 @@ class Make:
 							single_branch=True, depth=1)
 			LOGI("Cloning finished")
 
-	def run(self, target: str = None):
+	def run(self, target: Union[str, list] = None):
 		command = ["make"]
 		command.extend(self.make_flags)
 		if target is not None:
-			command.append(target)
+			if isinstance(target, str):
+				command.append(target)
+			else:
+				command.extend(target)
 
 		process = Popen(command, env=self.env_vars, stdout=PIPE, stderr=STDOUT,
 						cwd=self.kernel_source, encoding="UTF-8")

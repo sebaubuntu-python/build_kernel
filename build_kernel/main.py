@@ -32,7 +32,7 @@ def main():
 		make.run("mrproper")
 
 	LOGI("Building defconfig")
-	make.run(device.TARGET_KERNEL_CONFIG)
+	make.run([device.TARGET_KERNEL_CONFIG] + device.TARGET_KERNEL_FRAGMENTS)
 
 	LOGI("Building kernel")
 	make.run()
