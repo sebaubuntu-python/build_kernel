@@ -1,9 +1,9 @@
 from argparse import ArgumentParser
 from build_kernel.utils.ak3 import AK3Manager
-from build_kernel.utils.cc import Make
 from build_kernel.utils.device import devices
-from build_kernel.utils.info import print_summary
+from build_kernel.utils.dumpvars import dumpvars
 from build_kernel.utils.logging import LOGE, LOGI, setup_logging
+from build_kernel.utils.make import Make
 
 def main():
 	setup_logging()
@@ -24,7 +24,7 @@ def main():
 	device = devices[args.device]
 	make = Make(device)
 
-	print_summary(device)
+	dumpvars(device)
 
 	if args.clean is True:
 		LOGI("Cleaning before building")

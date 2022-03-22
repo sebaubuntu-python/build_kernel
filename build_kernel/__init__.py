@@ -1,7 +1,6 @@
 """Android kernel builder module."""
 
 from build_kernel.utils.device import register_devices
-import os
 from pathlib import Path
 
 # I'm sorry
@@ -13,12 +12,11 @@ except ModuleNotFoundError:
 __version__ = "1.0.0"
 
 module_path = Path(__file__).parent
-current_path = Path(os.getcwd())
+current_path = Path.cwd()
 
-root_path = module_path.parent
-device_path = root_path / "device"
-kernel_path = root_path / "kernel"
-out_path = root_path / "out"
-prebuilts_path = root_path / "prebuilts"
+device_path = current_path / "device"
+kernel_path = current_path / "kernel"
+out_path = current_path / "out"
+toolchains_path = current_path / "toolchains"
 
 register_devices(device_path)

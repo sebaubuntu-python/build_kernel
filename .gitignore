@@ -1,10 +1,3 @@
-# Kernel folder
-kernel/
-# Build artifacts
-out/
-# Toolchains
-prebuilts/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -91,3 +84,12 @@ dmypy.json
 # editors
 .idea/
 .vscode/
+
+# Kernel folder
+kernel/
+
+# Build artifacts
+out/
+
+# Toolchains
+toolchains/

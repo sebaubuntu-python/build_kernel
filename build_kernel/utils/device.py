@@ -1,4 +1,4 @@
-from build_kernel.utils.logging import LOGE, LOGI, format_exception
+from build_kernel.utils.logging import LOGE, format_exception
 from importlib import import_module
 from pathlib import Path
 from pkgutil import iter_modules
@@ -14,6 +14,9 @@ class Device:
 	TARGET_BLOCK_DEVICE: str = "/dev/block/bootdevice/by-name/boot"
 	TARGET_BUILD_ARTIFACTS: list[str] = []
 	TARGET_ADDITIONAL_MAKE_FLAGS: list[str] = []
+	TARGET_KERNEL_CLANG_COMPILE: bool = True
+	TARGET_KERNEL_GCC_VERSION: str = None
+	TARGET_KERNEL_CLANG_VERSION: str = None
 
 devices: dict[str, Device] = {}
 

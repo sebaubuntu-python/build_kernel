@@ -1,8 +1,8 @@
 from build_kernel import out_path
-from build_kernel.utils.cc import KERNEL_NAME, KERNEL_VERSION
 from build_kernel.utils.config import get_config
 from build_kernel.utils.device import Device
 from build_kernel.utils.logging import LOGI
+from build_kernel.utils.make import KERNEL_NAME, KERNEL_VERSION
 from datetime import date
 from git import Repo
 from pathlib import Path

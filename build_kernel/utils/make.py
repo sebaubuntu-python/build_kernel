@@ -1,21 +1,14 @@
-from build_kernel import prebuilts_path, root_path, out_path
+from build_kernel import current_path, out_path
+from build_kernel.utils.arch import Arch
 from build_kernel.utils.config import get_config
 from build_kernel.utils.device import Device
-from build_kernel.utils.logging import LOGI
-from git import Repo
+from build_kernel.utils.toolchain import ClangToolchain, GccToolchain
 from multiprocessing import cpu_count
 import os
+from pathlib import Path
+import platform
 from subprocess import Popen, PIPE, STDOUT
 from typing import Union
-
-TOOLCHAINS_REMOTE = "https://github.com/SebaUbuntu/android-kernel-builder"
-CLANG_VERSION = "r383902b"
-GCC_VERSION = "4.9"
-
-CLANG_PATH = prebuilts_path / "clang" / "linux-x86" / f"clang-{CLANG_VERSION}"
-GCC_PATH = prebuilts_path / "gcc" / "linux-x86"
-GCC_AARCH64_PATH = GCC_PATH / "aarch64" / f"aarch64-linux-android-{GCC_VERSION}"
-GCC_ARM_PATH = GCC_PATH / "arm" / f"arm-linux-androideabi-{GCC_VERSION}"
 
 ENABLE_CCACHE = get_config("build.enable_ccache", False)
 KERNEL_NAME = get_config("build.kernel_name")
@@ -23,42 +16,57 @@ KERNEL_VERSION = get_config("build.kernel_version")
 KBUILD_BUILD_USER = get_config("build.kbuild_build_user")
 KBUILD_BUILD_HOST = get_config("build.kbuild_build_host")
 
+SUPPORTED_ENVIRONMENTS: list[tuple[str, str]] = [
+	("64bit", "ELF"),
+]
+"""List of supported arch/system combos."""
+
 class Make:
 	def __init__(self, device: Device):
 		self.device = device
 
-		self.kernel_source = root_path / self.device.TARGET_KERNEL_SOURCE
+		host_architecture = platform.architecture()
+		if host_architecture not in SUPPORTED_ENVIRONMENTS:
+			raise RuntimeError(f"Unsupported environment: {host_architecture}")
+
+		self.kernel_source = current_path / self.device.TARGET_KERNEL_SOURCE
+		self.out_path = out_path / device.PRODUCT_DEVICE / "KERNEL_OBJ"
+		self.out_path.mkdir(exist_ok=True, parents=True)
+
+		self.arch = Arch.from_name(self.device.TARGET_ARCH)
+
+		if device.TARGET_KERNEL_CLANG_COMPILE:
+			self.toolchain = (ClangToolchain.from_version(device.TARGET_KERNEL_CLANG_VERSION)
+			                  if device.TARGET_KERNEL_CLANG_VERSION
+			                  else ClangToolchain.DEFAULT)
+		else:
+			self.toolchain = (GccToolchain.from_version(device.TARGET_KERNEL_GCC_VERSION)
+			                  if device.TARGET_KERNEL_GCC_VERSION
+			                  else GccToolchain.get_default(self.arch))
+
+		self.toolchain.prepare(self.arch)
+
+		self.path_dirs: list[Path] = []
+		self.path_dirs.extend(self.toolchain.get_path_dirs(self.arch))
 
 		# Create environment variables
 		self.env_vars = os.environ.copy()
-		self.env_vars['PATH'] = f"{CLANG_PATH}/bin:{GCC_AARCH64_PATH}/bin:{GCC_ARM_PATH}/bin:{self.env_vars['PATH']}"
-
-		self.out_path = out_path / device.PRODUCT_DEVICE / "KERNEL_OBJ"
-		self.out_path.mkdir(exist_ok=True, parents=True)
+		self.env_vars['PATH'] = f"{':'.join([str(path) for path in self.path_dirs])}:{self.env_vars['PATH']}"
 
 		# Create Make flags
 		self.make_flags = [
 			f"O={self.out_path}",
-			f"ARCH={device.TARGET_ARCH}",
-			f"SUBARCH={device.TARGET_ARCH}",
+			f"ARCH={self.arch.name}",
+			f"SUBARCH={self.arch.name}",
 			f"-j{cpu_count()}",
 		]
 
-		if device.TARGET_ARCH == "arm64":
-			self.make_flags.append("CROSS_COMPILE=aarch64-linux-android-")
-			self.make_flags.append("CROSS_COMPILE_ARM32=arm-linux-androideabi-")
-		else:
-			self.make_flags.append("CROSS_COMPILE=arm-linux-androideabi-")
+		self.make_flags.extend(self.toolchain.get_make_flags(self.arch))
 
 		if ENABLE_CCACHE:
-			self.make_flags.append(f"CC=ccache clang")
+			self.make_flags.append(f"CC=ccache {self.toolchain.cc}")
 		else:
-			self.make_flags.append(f"CC=clang")
-
-		if device.TARGET_ARCH == "arm64":
-			self.make_flags.append("CLANG_TRIPLE=aarch64-linux-gnu-")
-		else:
-			self.make_flags.append("CLANG_TRIPLE=arm-linux-gnu-")
+			self.make_flags.append(f"CC={self.toolchain.cc}")
 
 		localversion = ""
 		if KERNEL_NAME:
@@ -75,17 +83,6 @@ class Make:
 			self.make_flags.append(f"KBUILD_BUILD_HOST={KBUILD_BUILD_HOST}")
 
 		self.make_flags += device.TARGET_ADDITIONAL_MAKE_FLAGS
-
-		# Clone toolchains if needed
-		for toolchain in ["clang", "gcc"]:
-			toolchain_path = prebuilts_path / toolchain
-			if toolchain_path.is_dir():
-				continue
-
-			LOGI(f"Cloning toolchain: {toolchain}")
-			Repo.clone_from(TOOLCHAINS_REMOTE, toolchain_path, branch=f"prebuilts-{toolchain}",
-							single_branch=True, depth=1)
-			LOGI("Cloning finished")
 
 	def run(self, target: Union[str, list] = None):
 		command = ["make"]
