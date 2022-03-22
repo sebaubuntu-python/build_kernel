@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "android-kernel-builder"
+name = "build_kernel"
 version = "1.1.0"
 description = "Android kernel building script"
 authors = ["Sebastiano Barezzi <barezzisebastiano@gmail.com>"]
