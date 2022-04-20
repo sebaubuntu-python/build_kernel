@@ -14,6 +14,7 @@ class Device:
 	TARGET_BLOCK_DEVICE: str = "/dev/block/bootdevice/by-name/boot"
 	TARGET_BUILD_ARTIFACTS: list[str] = []
 	TARGET_ADDITIONAL_MAKE_FLAGS: list[str] = []
+	TARGET_KERNEL_USE_HOST_COMPILER: bool = False
 	TARGET_KERNEL_CLANG_COMPILE: bool = True
 	TARGET_KERNEL_GCC_VERSION: str = None
 	TARGET_KERNEL_CLANG_VERSION: str = None

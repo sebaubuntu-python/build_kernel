@@ -35,19 +35,23 @@ class Make:
 
 		self.arch = Arch.from_name(self.device.TARGET_ARCH)
 
-		if device.TARGET_KERNEL_CLANG_COMPILE:
-			self.toolchain = (ClangToolchain.from_version(device.TARGET_KERNEL_CLANG_VERSION)
-			                  if device.TARGET_KERNEL_CLANG_VERSION
-			                  else ClangToolchain.DEFAULT)
-		else:
-			self.toolchain = (GccToolchain.from_version(device.TARGET_KERNEL_GCC_VERSION)
-			                  if device.TARGET_KERNEL_GCC_VERSION
-			                  else GccToolchain.get_default(self.arch))
+		if not device.TARGET_KERNEL_USE_HOST_COMPILER:
+			if device.TARGET_KERNEL_CLANG_COMPILE:
+				self.toolchain = (ClangToolchain.from_version(device.TARGET_KERNEL_CLANG_VERSION)
+				                  if device.TARGET_KERNEL_CLANG_VERSION
+				                  else ClangToolchain.DEFAULT)
+			else:
+				self.toolchain = (GccToolchain.from_version(device.TARGET_KERNEL_GCC_VERSION)
+				                  if device.TARGET_KERNEL_GCC_VERSION
+				                  else GccToolchain.get_default(self.arch))
 
-		self.toolchain.prepare(self.arch)
+			self.toolchain.prepare(self.arch)
+		else:
+			self.toolchain = None
 
 		self.path_dirs: list[Path] = []
-		self.path_dirs.extend(self.toolchain.get_path_dirs(self.arch))
+		if not device.TARGET_KERNEL_USE_HOST_COMPILER:
+			self.path_dirs.extend(self.toolchain.get_path_dirs(self.arch))
 
 		# Create environment variables
 		self.env_vars = os.environ.copy()
@@ -61,12 +65,13 @@ class Make:
 			f"-j{cpu_count()}",
 		]
 
-		self.make_flags.extend(self.toolchain.get_make_flags(self.arch))
+		if not device.TARGET_KERNEL_USE_HOST_COMPILER:
+			self.make_flags.extend(self.toolchain.get_make_flags(self.arch))
 
-		if ENABLE_CCACHE:
-			self.make_flags.append(f"CC=ccache {self.toolchain.cc}")
-		else:
-			self.make_flags.append(f"CC={self.toolchain.cc}")
+			if ENABLE_CCACHE:
+				self.make_flags.append(f"CC=ccache {self.toolchain.cc}")
+			else:
+				self.make_flags.append(f"CC={self.toolchain.cc}")
 
 		localversion = ""
 		if KERNEL_NAME:
