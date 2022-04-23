@@ -1,6 +1,4 @@
-"""
-Common configuration for msm8998/sdm660 devices
-"""
+"""Common configuration for msm8998/sdm660 devices."""
 
 from build_kernel.utils.device import Device
 

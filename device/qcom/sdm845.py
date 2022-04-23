@@ -1,6 +1,4 @@
-"""
-Common configuration for sdm845/sdm710 devices
-"""
+"""Common configuration for sdm845/sdm710 devices."""
 
 from build_kernel.utils.device import Device
 

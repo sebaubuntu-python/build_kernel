@@ -1,4 +1,3 @@
-
 from build_kernel.utils.device import register_device
 from device.asus.msm8937 import AsusMSM8937Device
 

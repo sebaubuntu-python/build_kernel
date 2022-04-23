@@ -1,6 +1,4 @@
-"""
-Common configuration for sm8150/sm6150/sm6250 devices
-"""
+"""Common configuration for sm8150/sm6150/sm6250 devices."""
 
 from build_kernel.utils.device import Device
 

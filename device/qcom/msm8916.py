@@ -1,6 +1,4 @@
-"""
-Common configuration for msm8916 devices
-"""
+"""Common configuration for msm8916 devices."""
 
 from build_kernel.utils.device import Device
 
