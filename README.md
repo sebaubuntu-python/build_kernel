@@ -4,26 +4,26 @@
 
 Little build system to build Android kernel sources
 
-- Clones AOSP Clang automatically
-- Managed with config files
-- Automatic AnyKernel3 packing
+-   Clones AOSP Clang automatically
+-   Managed with config files
+-   Automatic AnyKernel3 packing
 
 Note: Requires Python 3.9
 
 ## Installation
 
-- Clone the repo
-- Open a terminal with pwd as the cloned repo
-- `pip3 install .`
+-   Clone the repo
+-   Open a terminal with pwd as the cloned repo
+-   `pip3 install .`
 
 ## Sources preparation
 
-- Add a config for your kernel in `device/vendor/codename.py` (check the example config in `device/examples/example.py`)
-- Add kernel sources in `kernel/` (in the path that you specified in the config)
+-   Add a config for your kernel in `device/vendor/codename.py` (check the example config in `device/examples/example.py`)
+-   Add kernel sources in `kernel/` (in the path that you specified in the config)
 
 ## How to use
 
-```
+```sh
 $ python3 -m build_kernel -h
 usage: python3 -m kernel_build [-h] [-c] [-v] device
 
