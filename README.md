@@ -1,5 +1,7 @@
 # Android kernel building script
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/83567b747b614dc7892e1c2c1bf8cbd9)](https://www.codacy.com/gh/SebaUbuntu/android-kernel-builder/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=SebaUbuntu/android-kernel-builder&amp;utm_campaign=Badge_Grade)
+
 Little build system to build Android kernel sources
 
 - Clones AOSP Clang automatically
