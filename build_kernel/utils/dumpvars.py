@@ -3,7 +3,7 @@ from build_kernel.utils.device import Device
 from build_kernel.utils.make import KBUILD_BUILD_USER, KBUILD_BUILD_HOST, ENABLE_CCACHE
 
 def dumpvars(device: Device):
-	vars = {
+	variables = {
 		"PRODUCT_DEVICE": device.PRODUCT_DEVICE,
 		"TARGET_ARCH": device.TARGET_ARCH,
 		"TARGET_KERNEL_SOURCE": current_path / device.TARGET_KERNEL_SOURCE,
@@ -15,6 +15,6 @@ def dumpvars(device: Device):
 
 	print("\n".join([
 		"============================================",
-		*[f"{k}={v}" for k, v in vars.items()],
+		*[f"{k}={v}" for k, v in variables.items()],
 		"============================================",
 	]))
