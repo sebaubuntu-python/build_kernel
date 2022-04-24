@@ -22,7 +22,9 @@ SUPPORTED_ENVIRONMENTS: list[tuple[str, str]] = [
 """List of supported arch/system combos."""
 
 class Make:
+	"""Class representing a make instance."""
 	def __init__(self, device: Device):
+		"""Initialize a Make instance."""
 		self.device = device
 
 		host_architecture = platform.architecture()
