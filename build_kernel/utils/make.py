@@ -2,7 +2,7 @@ from build_kernel import current_path, out_path
 from build_kernel.utils.arch import Arch
 from build_kernel.utils.config import get_config
 from build_kernel.utils.device import Device
-from build_kernel.utils.toolchain import _ClangToolchain, ClangToolchain, GccToolchain
+from build_kernel.utils.toolchain import ClangToolchain, GccToolchain
 from multiprocessing import cpu_count
 import os
 from pathlib import Path
@@ -74,7 +74,7 @@ class Make:
 		if self.toolchain:
 			self.make_flags.extend(self.toolchain.get_make_flags(self.arch))
 
-			if ENABLE_CCACHE and isinstance(self.toolchain, _ClangToolchain):
+			if ENABLE_CCACHE:
 				self.make_flags.append(f"CC=ccache {self.toolchain.cc}")
 			else:
 				self.make_flags.append(f"CC={self.toolchain.cc}")
