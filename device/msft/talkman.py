@@ -7,5 +7,7 @@ class MsftTalkmanDevice(Device):
 	TARGET_KERNEL_SOURCE = "kernel/msft/talkman"
 	TARGET_BLOCK_DEVICE = "/dev/block/by-name/boot"
 	TARGET_BUILD_ARTIFACTS = ["Image.gz"]
+	TARGET_KERNEL_USE_HOST_COMPILER = True
+	TARGET_KERNEL_CROSS_COMPILE_PREFIX = "aarch64-linux-gnu-"
 
 register_device(MsftTalkmanDevice)
