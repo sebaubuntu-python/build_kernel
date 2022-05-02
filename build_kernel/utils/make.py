@@ -46,13 +46,17 @@ class Make:
 				self.toolchain = (GccToolchain.from_version(device.TARGET_KERNEL_GCC_VERSION)
 				                  if device.TARGET_KERNEL_GCC_VERSION
 				                  else GccToolchain.get_default(self.arch))
-
-			self.toolchain.prepare(self.arch)
+		elif device.TARGET_KERNEL_CROSS_COMPILE_PREFIX:
+			self.toolchain = GccToolchain(device.TARGET_KERNEL_CROSS_COMPILE_PREFIX,
+			                              device.TARGET_KERNEL_CROSS_COMPILE_PREFIX, None)
 		else:
 			self.toolchain = None
 
+		if self.toolchain:
+			self.toolchain.prepare(self.arch)
+
 		self.path_dirs: list[Path] = []
-		if not device.TARGET_KERNEL_USE_HOST_COMPILER:
+		if self.toolchain:
 			self.path_dirs.extend(self.toolchain.get_path_dirs(self.arch))
 
 		# Create environment variables
@@ -67,7 +71,7 @@ class Make:
 			f"-j{cpu_count()}",
 		]
 
-		if not device.TARGET_KERNEL_USE_HOST_COMPILER:
+		if self.toolchain:
 			self.make_flags.extend(self.toolchain.get_make_flags(self.arch))
 
 			if ENABLE_CCACHE:

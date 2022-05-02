@@ -12,6 +12,9 @@ class _Toolchain:
 		self.cc = cc
 
 	def prepare(self, arch: Arch) -> None:
+		if not self.url:
+			return
+
 		if not self.path.exists():
 			LOGI(f"Toolchain {self.name} not found at {self.path}, cloning")
 			Repo.clone_from(self.url, self.path, branch=self.name,
@@ -28,8 +31,8 @@ class _GccToolchain(_Toolchain):
 	BASE_PATH = toolchains_path / "gcc"
 	BASE_REMOTE = "https://github.com/SebaUbuntu/toolchains_gcc"
 
-	def __init__(self, version: str, prefix: str):
-		super().__init__(version, self.BASE_PATH / version, self.BASE_REMOTE, "gcc")
+	def __init__(self, version: str, prefix: str, url: str = BASE_REMOTE):
+		super().__init__(version, self.BASE_PATH / version, url, "gcc")
 
 		self.prefix = prefix
 
