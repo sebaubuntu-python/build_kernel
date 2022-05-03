@@ -32,7 +32,7 @@ class _GccToolchain(_Toolchain):
 	BASE_REMOTE = "https://github.com/SebaUbuntu/toolchains_gcc"
 
 	def __init__(self, version: str, prefix: str, url: str = BASE_REMOTE):
-		super().__init__(version, self.BASE_PATH / version, url, "gcc")
+		super().__init__(version, self.BASE_PATH / version, url, "gcc" if not prefix else f"{prefix}gcc")
 
 		self.prefix = prefix
 
