@@ -10,11 +10,16 @@ def main():
 
 	parser = ArgumentParser(prog='python3 -m kernel_build')
 
+	# Positional arguments
 	parser.add_argument("device", type=str, help="device codename")
-	parser.add_argument("-c", "--clean", action='store_true', help="clean before building")
+
+	# Build tasks
+	parser.add_argument("-c", "--clean", action='store_true', help="cleanup out dir")
+
+	# Build options
 	parser.add_argument("-v", "--verbose", action='store_true', help="verbose logging")
 
-	args = parser.parse_args()
+	args, build_target = parser.parse_known_args()
 
 	if not args.device in devices:
 		LOGE(f"Device {args.device} not found")
@@ -26,13 +31,17 @@ def main():
 
 	dumpvars(device)
 
-	if args.clean is True:
-		LOGI("Cleaning before building")
+	if args.clean:
 		make.run("clean")
 		make.run("mrproper")
+		return
 
 	LOGI("Building defconfig")
 	make.run([device.TARGET_KERNEL_CONFIG] + device.TARGET_KERNEL_FRAGMENTS)
+
+	if build_target:
+		make.run(build_target)
+		return
 
 	LOGI("Building kernel")
 	make.run()
