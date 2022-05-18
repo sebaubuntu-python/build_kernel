@@ -1,9 +1,7 @@
 from argparse import ArgumentParser
-from build_kernel.utils.ak3 import AK3Manager
+from build_kernel.builder import Builder
 from build_kernel.utils.device import devices
-from build_kernel.utils.dumpvars import dumpvars
 from build_kernel.utils.logging import LOGE, LOGI, setup_logging
-from build_kernel.utils.make import Make
 
 def main():
 	setup_logging()
@@ -21,33 +19,18 @@ def main():
 
 	args, build_target = parser.parse_known_args()
 
-	if not args.device in devices:
+	builder = Builder.from_codename(args.device)
+	if not builder:
 		LOGE(f"Device {args.device} not found")
 		LOGI("Available devices:\n" + "\n".join(devices.keys()))
 		return
 
-	device = devices[args.device]
-	make = Make(device)
-
-	dumpvars(device)
+	builder.dumpvars()
 
 	if args.clean:
-		make.run("clean")
-		make.run("mrproper")
+		builder.clean()
 		return
 
-	LOGI("Building defconfig")
-	make.run([device.TARGET_KERNEL_CONFIG] + device.TARGET_KERNEL_FRAGMENTS)
-
-	if build_target:
-		make.run(build_target)
-		return
-
-	LOGI("Building kernel")
-	make.run()
-
-	LOGI("Creating AnyKernel3 zip")
-	ak3manager = AK3Manager(device)
-	zip_filename = ak3manager.create_ak3_zip()
+	zip_filename = builder.build(build_target)
 
 	LOGI(f"Build completed successfully: {zip_filename}")
