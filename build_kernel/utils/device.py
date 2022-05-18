@@ -5,14 +5,21 @@ from pkgutil import iter_modules
 
 class Device:
 	PRODUCT_DEVICE: str
+
 	TARGET_ARCH: str
 	TARGET_KERNEL_CONFIG: str
 	TARGET_KERNEL_FRAGMENTS: list[str] = []
 	TARGET_KERNEL_SOURCE: Path
+
 	AB_OTA_UPDATER: bool = False
 	BOARD_BUILD_SYSTEM_ROOT_IMAGE: bool = False
 	TARGET_BLOCK_DEVICE: str = "/dev/block/bootdevice/by-name/boot"
-	TARGET_BUILD_ARTIFACTS: list[str] = []
+
+	BOARD_KERNEL_IMAGE_NAME: str
+	BOARD_INCLUDE_DTB_IN_BOOTIMG: bool = False
+	BOARD_KERNEL_SEPARATED_DTBO: bool = False
+	BOARD_KERNEL_PAGESIZE: int = 2048
+
 	TARGET_ADDITIONAL_MAKE_FLAGS: list[str] = []
 	TARGET_KERNEL_USE_HOST_COMPILER: bool = False
 	TARGET_KERNEL_CROSS_COMPILE_PREFIX: str = None

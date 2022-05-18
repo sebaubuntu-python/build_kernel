@@ -1,7 +1,6 @@
 from build_kernel import out_path
 from build_kernel.utils.config import get_config
 from build_kernel.utils.device import Device
-from build_kernel.utils.logging import LOGI
 from build_kernel.utils.make import KERNEL_NAME, KERNEL_VERSION
 from datetime import date
 from git import Repo
@@ -68,21 +67,15 @@ class AK3Manager:
 
 		Repo.clone_from(ANYKERNEL3_REMOTE, self.path, single_branch=True, depth=1)
 
-	def create_ak3_zip(self):
-		artifacts = self.device_out_path / "KERNEL_OBJ" / "arch" / self.device.TARGET_ARCH / "boot"
-		file_found = False
-		for artifact in [artifacts / artifact for artifact in self.device.TARGET_BUILD_ARTIFACTS]:
-			if not artifact.is_file():
-				continue
-			file_found = True
+	def create_ak3_zip(self, artifacts: list[Path]):
+		assert artifacts, "No artifacts to create zip file from"
+
+		for artifact in artifacts:
+			assert artifact.is_file(), f"{artifact} is not a file"
+
 			copyfile(artifact, self.path / artifact.name)
 
-		if file_found is False:
-			LOGI("No artifact found, skipping AK3 zip creation")
-			return
-
-		with open(self.path / "anykernel.sh", 'w') as f:
-			f.write(self.get_ak3_config())
+		(self.path / "anykernel.sh").write_text(self.get_ak3_config())
 
 		zip_filename = self.device_out_path / self.get_ak3_zip_filename()
 

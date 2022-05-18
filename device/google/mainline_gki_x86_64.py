@@ -6,7 +6,7 @@ class GoogleMainlineGkix8664Device(Device):
 	TARGET_KERNEL_CONFIG = "gki_defconfig"
 	TARGET_KERNEL_SOURCE = "kernel/google/android-mainline"
 	TARGET_BLOCK_DEVICE = "/dev/block/by-name/boot"
-	TARGET_BUILD_ARTIFACTS = ["vmlinuz"]
+	BOARD_KERNEL_IMAGE_NAME = "vmlinuz"
 	TARGET_KERNEL_USE_HOST_COMPILER = True
 
 register_device(GoogleMainlineGkix8664Device)

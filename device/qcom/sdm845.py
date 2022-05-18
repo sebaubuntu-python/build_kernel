@@ -3,4 +3,5 @@
 from build_kernel.utils.device import Device
 
 class QcomSDM845Device(Device):
-	TARGET_BUILD_ARTIFACTS = ["Image.gz-dtb", "dtbo.img"]
+	BOARD_KERNEL_IMAGE_NAME = "Image.gz-dtb"
+	BOARD_KERNEL_SEPARATED_DTBO = True

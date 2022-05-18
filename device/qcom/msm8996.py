@@ -3,4 +3,4 @@
 from build_kernel.utils.device import Device
 
 class QcomMSM8996Device(Device):
-	TARGET_BUILD_ARTIFACTS = ["Image.gz-dtb"]
+	BOARD_KERNEL_IMAGE_NAME = "Image.gz-dtb"
