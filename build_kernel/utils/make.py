@@ -95,7 +95,7 @@ class Make:
 
 		self.make_flags += device.TARGET_ADDITIONAL_MAKE_FLAGS
 
-	def run(self, target: Union[str, list] = None):
+	def run(self, target: Union[str, list[str]] = None):
 		command = ["make"]
 		command.extend(self.make_flags)
 		if target is not None:
