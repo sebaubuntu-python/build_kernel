@@ -86,7 +86,7 @@ class AK3Manager:
 	def get_ak3_config(self):
 		is_ab = '1' if self.device.AB_OTA_UPDATER else '0'
 		flash_procedure = (FLASH_PROCEDURE_RAMDISK
-		                   if self.device.BOARD_BUILD_SYSTEM_ROOT_IMAGE
+		                   if not self.device.BOARD_BUILD_SYSTEM_ROOT_IMAGE
 		                   else FLASH_PROCEDURE_NO_RAMDISK)
 
 		text = AK3_CONFIG.format(device=self.device, kernel_name=KERNEL_NAME,
