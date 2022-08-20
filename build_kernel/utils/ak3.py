@@ -1,3 +1,4 @@
+from typing import List
 from build_kernel import out_path
 from build_kernel.utils.config import get_config
 from build_kernel.utils.device import Device
@@ -67,7 +68,7 @@ class AK3Manager:
 
 		Repo.clone_from(ANYKERNEL3_REMOTE, self.path, single_branch=True, depth=1)
 
-	def create_ak3_zip(self, artifacts: list[Path]):
+	def create_ak3_zip(self, artifacts: List[Path]):
 		assert artifacts, "No artifacts to create zip file from"
 
 		for artifact in artifacts:

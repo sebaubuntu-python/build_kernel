@@ -1,3 +1,4 @@
+from typing import Dict, List
 from build_kernel.utils.logging import LOGE, format_exception
 from importlib import import_module
 from pathlib import Path
@@ -8,7 +9,7 @@ class Device:
 
 	TARGET_ARCH: str
 	TARGET_KERNEL_CONFIG: str
-	TARGET_KERNEL_FRAGMENTS: list[str] = []
+	TARGET_KERNEL_FRAGMENTS: List[str] = []
 	TARGET_KERNEL_SOURCE: Path
 
 	AB_OTA_UPDATER: bool = False
@@ -20,14 +21,14 @@ class Device:
 	BOARD_KERNEL_SEPARATED_DTBO: bool = False
 	BOARD_KERNEL_PAGESIZE: int = 2048
 
-	TARGET_ADDITIONAL_MAKE_FLAGS: list[str] = []
+	TARGET_ADDITIONAL_MAKE_FLAGS: List[str] = []
 	TARGET_KERNEL_USE_HOST_COMPILER: bool = False
 	TARGET_KERNEL_CROSS_COMPILE_PREFIX: str = None
 	TARGET_KERNEL_CLANG_COMPILE: bool = True
 	TARGET_KERNEL_GCC_VERSION: str = None
 	TARGET_KERNEL_CLANG_VERSION: str = None
 
-devices: dict[str, Device] = {}
+devices: Dict[str, Device] = {}
 
 def register_device(device: Device):
 	devices[device.PRODUCT_DEVICE] = device

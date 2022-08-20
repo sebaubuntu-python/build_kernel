@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 import platform
 from subprocess import Popen, PIPE, STDOUT
-from typing import Union
+from typing import List, Tuple, Union
 
 ENABLE_CCACHE = get_config("build.enable_ccache", False)
 KERNEL_NAME = get_config("build.kernel_name")
@@ -16,7 +16,7 @@ KERNEL_VERSION = get_config("build.kernel_version")
 KBUILD_BUILD_USER = get_config("build.kbuild_build_user")
 KBUILD_BUILD_HOST = get_config("build.kbuild_build_host")
 
-SUPPORTED_ENVIRONMENTS: list[tuple[str, str]] = [
+SUPPORTED_ENVIRONMENTS: List[Tuple[str, str]] = [
 	("64bit", "ELF"),
 ]
 """List of supported arch/system combos."""
@@ -55,7 +55,7 @@ class Make:
 		if self.toolchain:
 			self.toolchain.prepare(self.arch)
 
-		self.path_dirs: list[Path] = []
+		self.path_dirs: List[Path] = []
 		if self.toolchain:
 			self.path_dirs.extend(self.toolchain.get_path_dirs(self.arch))
 
@@ -95,7 +95,7 @@ class Make:
 
 		self.make_flags += device.TARGET_ADDITIONAL_MAKE_FLAGS
 
-	def run(self, target: Union[str, list[str]] = None):
+	def run(self, target: Union[str, List[str]] = None):
 		command = ["make"]
 		command.extend(self.make_flags)
 		if target is not None:

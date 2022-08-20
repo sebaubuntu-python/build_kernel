@@ -1,3 +1,4 @@
+from typing import List
 from build_kernel import toolchains_path
 from build_kernel.utils.arch import Arch
 from build_kernel.utils.logging import LOGI
@@ -21,10 +22,10 @@ class _Toolchain:
 			                single_branch=True, depth=1)
 			LOGI(f"Toolchain {self.name} cloned")
 
-	def get_path_dirs(self, arch: Arch) -> list[Path]:
+	def get_path_dirs(self, arch: Arch) -> List[Path]:
 		raise NotImplementedError()
 
-	def get_make_flags(self, arch: Arch) -> list[str]:
+	def get_make_flags(self, arch: Arch) -> List[str]:
 		raise NotImplementedError()
 
 class _GccToolchain(_Toolchain):
@@ -36,14 +37,14 @@ class _GccToolchain(_Toolchain):
 
 		self.prefix = prefix
 
-	def get_path_dirs(self, arch: Arch) -> list[Path]:
+	def get_path_dirs(self, arch: Arch) -> List[Path]:
 		path_dirs = []
 
 		path_dirs.append(self.path / "bin")
 
 		return path_dirs
 
-	def get_make_flags(self, arch: Arch) -> list[str]:
+	def get_make_flags(self, arch: Arch) -> List[str]:
 		make_flags = []
 
 		make_flags.append(f"CROSS_COMPILE={self.prefix}")
@@ -97,7 +98,7 @@ class _ClangToolchain(_Toolchain):
 		if arch is Arch.ARM64:
 			GccToolchain.get_default(Arch.ARM).prepare(arch)
 
-	def get_path_dirs(self, arch: Arch) -> list[Path]:
+	def get_path_dirs(self, arch: Arch) -> List[Path]:
 		default_gcc = GccToolchain.get_default(arch)
 
 		path_dirs = default_gcc.get_path_dirs(arch)
@@ -110,7 +111,7 @@ class _ClangToolchain(_Toolchain):
 
 		return path_dirs
 
-	def get_make_flags(self, arch: Arch) -> list[str]:
+	def get_make_flags(self, arch: Arch) -> List[str]:
 		default_gcc = GccToolchain.get_default(arch)
 
 		make_flags = default_gcc.get_make_flags(arch)

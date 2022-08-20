@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "build_kernel"
 version = "1.2.0"
-description = "Android kernel building script"
+description = "Linux kernel building script"
 authors = ["Sebastiano Barezzi <barezzisebastiano@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 GitPython = "^3.1.27"
 
 [tool.poetry.dev-dependencies]

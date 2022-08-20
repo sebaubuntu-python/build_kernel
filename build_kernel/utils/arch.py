@@ -1,7 +1,8 @@
 from __future__ import annotations
+from typing import List
 
 class _Arch:
-	_ALL: list[_Arch] = []
+	_ALL: List[_Arch] = []
 
 	def __init__(self, name: str, clang_triple_prefix: str):
 		self.name = name
