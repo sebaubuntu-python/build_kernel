@@ -11,7 +11,7 @@ smmap = ">=3.0.1,<5"
 
 [[package]]
 name = "GitPython"
-version = "3.1.28"
+version = "3.1.29"
 description = "GitPython is a python library used to interact with Git repositories"
 category = "main"
 optional = false
@@ -31,7 +31,7 @@ python-versions = ">=3.5"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "cbb6775bf9c212698df45612307bb0c605874b24661fb5d753535d668ae6f516"
+content-hash = "6dcd421ee5b23e780be6c8f44fdec1d0f354fe5300d4d7e600bf3be7fa70bae2"
 
 [metadata.files]
 gitdb = [
@@ -39,8 +39,8 @@ gitdb = [
     {file = "gitdb-4.0.7.tar.gz", hash = "sha256:96bf5c08b157a666fec41129e6d327235284cca4c81e92109260f353ba138005"},
 ]
 GitPython = [
-    {file = "GitPython-3.1.28-py3-none-any.whl", hash = "sha256:77bfbd299d8709f6af7e0c70840ef26e7aff7cf0c1ed53b42dd7fc3a310fcb02"},
-    {file = "GitPython-3.1.28.tar.gz", hash = "sha256:6bd3451b8271132f099ceeaf581392eaf6c274af74bb06144307870479d0697c"},
+    {file = "GitPython-3.1.29-py3-none-any.whl", hash = "sha256:41eea0deec2deea139b459ac03656f0dd28fc4a3387240ec1d3c259a2c47850f"},
+    {file = "GitPython-3.1.29.tar.gz", hash = "sha256:cc36bfc4a3f913e66805a28e84703e419d9c264c1077e537b54f0e1af85dbefd"},
 ]
 smmap = [
     {file = "smmap-4.0.0-py2.py3-none-any.whl", hash = "sha256:a9a7479e4c572e2e775c404dcd3080c8dc49f39918c2cf74913d30c4c478e3c2"},
