@@ -3,6 +3,6 @@ from device.xiaomi.sdm660 import XiaomiSDM660Device
 
 class XiaomiPlatinaDevice(XiaomiSDM660Device):
 	PRODUCT_DEVICE = "platina"
-	TARGET_KERNEL_CONFIG = f"{PRODUCT_DEVICE}_defconfig"
+	TARGET_KERNEL_FRAGMENTS = [f"vendor/xiaomi/{PRODUCT_DEVICE}.config"]
 
 register_device(XiaomiPlatinaDevice)
