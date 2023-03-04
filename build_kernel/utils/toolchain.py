@@ -1,12 +1,12 @@
-from typing import List
 from build_kernel import toolchains_path
 from build_kernel.utils.arch import Arch
 from build_kernel.utils.logging import LOGI
-from git import Repo
+from git.repo import Repo
 from pathlib import Path
+from typing import List, Optional
 
 class _Toolchain:
-	def __init__(self, name: str, path: Path, url: str, cc: str):
+	def __init__(self, name: str, path: Path, url: Optional[str], cc: str):
 		self.name = name
 		self.path = path
 		self.url = url
@@ -32,7 +32,7 @@ class _GccToolchain(_Toolchain):
 	BASE_PATH = toolchains_path / "gcc"
 	BASE_REMOTE = "https://github.com/SebaUbuntu/toolchains_gcc"
 
-	def __init__(self, version: str, prefix: str, url: str = BASE_REMOTE):
+	def __init__(self, version: str, prefix: str, url: Optional[str] = BASE_REMOTE):
 		super().__init__(version, self.BASE_PATH / version, url, "gcc" if not prefix else f"{prefix}gcc")
 
 		self.prefix = prefix

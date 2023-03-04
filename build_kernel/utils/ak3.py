@@ -1,13 +1,13 @@
-from typing import List
 from build_kernel import out_path
 from build_kernel.utils.config import get_config
 from build_kernel.utils.device import Device
 from build_kernel.utils.make import KERNEL_NAME, KERNEL_VERSION
 from datetime import date
-from git import Repo
+from git.repo import Repo
 from pathlib import Path
 from shutil import copyfile, rmtree, make_archive
 from stat import S_IWRITE
+from typing import List
 
 ANYKERNEL3_REMOTE = "https://github.com/osm0sis/AnyKernel3"
 

@@ -40,11 +40,11 @@ class Make:
 		if not device.TARGET_KERNEL_USE_HOST_COMPILER:
 			if device.TARGET_KERNEL_CLANG_COMPILE:
 				self.toolchain = (ClangToolchain.from_version(device.TARGET_KERNEL_CLANG_VERSION)
-				                  if device.TARGET_KERNEL_CLANG_VERSION
+				                  if device.TARGET_KERNEL_CLANG_VERSION is not None
 				                  else ClangToolchain.DEFAULT)
 			else:
 				self.toolchain = (GccToolchain.from_version(device.TARGET_KERNEL_GCC_VERSION)
-				                  if device.TARGET_KERNEL_GCC_VERSION
+				                  if device.TARGET_KERNEL_GCC_VERSION is not None
 				                  else GccToolchain.get_default(self.arch))
 		elif device.TARGET_KERNEL_CROSS_COMPILE_PREFIX:
 			self.toolchain = GccToolchain(device.TARGET_KERNEL_CROSS_COMPILE_PREFIX,
@@ -95,7 +95,7 @@ class Make:
 
 		self.make_flags += device.TARGET_ADDITIONAL_MAKE_FLAGS
 
-	def run(self, target: Union[str, List[str]] = None):
+	def run(self, target: Union[str, List[str], None] = None):
 		command = ["make"]
 		command.extend(self.make_flags)
 		if target is not None:

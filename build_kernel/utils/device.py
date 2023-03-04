@@ -1,8 +1,8 @@
-from typing import Dict, List
 from build_kernel.utils.logging import LOGE, format_exception
 from importlib import import_module
 from pathlib import Path
 from pkgutil import iter_modules
+from typing import Dict, List, Optional
 
 class Device:
 	PRODUCT_DEVICE: str
@@ -23,10 +23,10 @@ class Device:
 
 	TARGET_ADDITIONAL_MAKE_FLAGS: List[str] = []
 	TARGET_KERNEL_USE_HOST_COMPILER: bool = False
-	TARGET_KERNEL_CROSS_COMPILE_PREFIX: str = None
+	TARGET_KERNEL_CROSS_COMPILE_PREFIX: Optional[str] = None
 	TARGET_KERNEL_CLANG_COMPILE: bool = True
-	TARGET_KERNEL_GCC_VERSION: str = None
-	TARGET_KERNEL_CLANG_VERSION: str = None
+	TARGET_KERNEL_GCC_VERSION: Optional[str] = None
+	TARGET_KERNEL_CLANG_VERSION: Optional[str] = None
 
 devices: Dict[str, Device] = {}
 
