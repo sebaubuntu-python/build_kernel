@@ -23,10 +23,17 @@ class _Toolchain:
 			LOGI(f"Toolchain {self.name} cloned")
 
 	def get_path_dirs(self, arch: Arch) -> List[Path]:
-		raise NotImplementedError()
+		path_dirs = []
+
+		return path_dirs
 
 	def get_make_flags(self, arch: Arch) -> List[str]:
-		raise NotImplementedError()
+		make_flags = []
+
+		make_flags.append('CPATH="/usr/include:/usr/include/x86_64-linux-gnu"')
+		make_flags.append('HOSTLDFLAGS="-L/usr/lib/x86_64-linux-gnu -L/usr/lib64 -fuse-ld=lld"')
+
+		return make_flags
 
 class _GccToolchain(_Toolchain):
 	BASE_PATH = toolchains_path / "gcc"
@@ -38,16 +45,24 @@ class _GccToolchain(_Toolchain):
 		self.prefix = prefix
 
 	def get_path_dirs(self, arch: Arch) -> List[Path]:
-		path_dirs = []
+		path_dirs = super().get_path_dirs(arch)
 
 		path_dirs.append(self.path / "bin")
 
 		return path_dirs
 
 	def get_make_flags(self, arch: Arch) -> List[str]:
-		make_flags = []
+		make_flags = super().get_make_flags(arch)
 
 		make_flags.append(f"CROSS_COMPILE={self.prefix}")
+
+		if arch == Arch.ARM:
+			# Avoid "Unknown symbol _GLOBAL_OFFSET_TABLE_" errors
+			make_flags.append('CFLAGS_MODULE="-fno-pic"')
+
+		if arch == Arch.ARM64:
+			# Avoid "unsupported RELA relocation: 311" errors (R_AARCH64_ADR_GOT_PAGE)
+			make_flags.append('CFLAGS_MODULE="-fno-pic"')
 
 		return make_flags
 
@@ -94,18 +109,20 @@ class _ClangToolchain(_Toolchain):
 
 		GccToolchain.get_default(arch).prepare(arch)
 
-		# For compat vDSO
+		# Needed for CONFIG_COMPAT_VDSO
 		if arch is Arch.ARM64:
 			GccToolchain.get_default(Arch.ARM).prepare(arch)
 
 	def get_path_dirs(self, arch: Arch) -> List[Path]:
+		path_dirs = super().get_path_dirs(arch)
+
 		default_gcc = GccToolchain.get_default(arch)
 
-		path_dirs = default_gcc.get_path_dirs(arch)
+		path_dirs.extend(default_gcc.get_path_dirs(arch))
 
 		path_dirs.append(self.path / "bin")
 
-		# For compat vDSO
+		# Needed for CONFIG_COMPAT_VDSO
 		if arch is Arch.ARM64:
 			path_dirs.extend(GccToolchain.get_default(Arch.ARM).get_path_dirs(arch))
 
@@ -118,9 +135,13 @@ class _ClangToolchain(_Toolchain):
 
 		make_flags.append(f"CLANG_TRIPLE={arch.clang_triple_prefix}")
 
-		# For compat vDSO
+		# Needed for CONFIG_COMPAT_VDSO
 		if arch is Arch.ARM64:
 			make_flags.append(f"CROSS_COMPILE_ARM32={GccToolchain.get_default(Arch.ARM).prefix}")
+
+		# Set the full path to the clang command and LLVM binutils
+		make_flags.append(f"HOSTCC={self.path / 'bin' / 'clang'}")
+		make_flags.append(f"HOSTCXX={self.path / 'bin' / 'clang++'}")
 
 		return make_flags
 
