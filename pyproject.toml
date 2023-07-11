@@ -9,7 +9,7 @@ repository = "https://github.com/sebaubuntu-python/build_kernel"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-GitPython = "^3.1.31"
+GitPython = "^3.1.32"
 
 [tool.poetry.dev-dependencies]
 
