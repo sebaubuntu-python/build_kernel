@@ -6,21 +6,35 @@ from pathlib import Path
 from typing import List, Optional
 
 class _Toolchain:
-	def __init__(self, name: str, path: Path, url: Optional[str], cc: str):
+	def __init__(
+		self,
+		name: str,
+		path: Path,
+		cc: str,
+		git_url: Optional[str] = None,
+		git_branch: Optional[str] = None,
+		repo_path: Optional[Path] = None,
+	):
 		self.name = name
 		self.path = path
-		self.url = url
 		self.cc = cc
+		self.git_url = git_url
+		self.git_branch = git_branch or name
+		self.repo_path = repo_path or path
 
 	def prepare(self, arch: Arch) -> None:
-		if not self.url:
+		if not self.git_url:
 			return
 
-		if not self.path.exists():
-			LOGI(f"Toolchain {self.name} not found at {self.path}, cloning")
-			Repo.clone_from(self.url, self.path, branch=self.name,
-			                single_branch=True, depth=1)
+		if not self.repo_path.exists():
+			LOGI(f"Toolchain {self.name} not found at {self.repo_path}, cloning")
+			Repo.clone_from(
+				self.git_url, self.repo_path, branch=self.git_branch,
+			    single_branch=True, depth=1
+			)
 			LOGI(f"Toolchain {self.name} cloned")
+		
+		assert self.path.exists()
 
 	def get_path_dirs(self, arch: Arch) -> List[Path]:
 		path_dirs = []
@@ -39,8 +53,18 @@ class _GccToolchain(_Toolchain):
 	BASE_PATH = toolchains_path / "gcc"
 	BASE_REMOTE = "https://github.com/SebaUbuntu/toolchains_gcc"
 
-	def __init__(self, version: str, prefix: str, url: Optional[str] = BASE_REMOTE):
-		super().__init__(version, self.BASE_PATH / version, url, "gcc" if not prefix else f"{prefix}gcc")
+	def __init__(
+		self,
+		version: str,
+		prefix: str,
+		git_url: Optional[str] = BASE_REMOTE,
+	):
+		super().__init__(
+			version,
+			self.BASE_PATH / version,
+			"gcc" if not prefix else f"{prefix}gcc",
+			git_url,
+		)
 
 		self.prefix = prefix
 
@@ -99,10 +123,18 @@ class GccToolchain(_GccToolchain):
 
 class _ClangToolchain(_Toolchain):
 	BASE_PATH = toolchains_path / "clang"
-	BASE_REMOTE = "https://github.com/SebaUbuntu/toolchains_clang"
+	BASE_REMOTE = "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86"
+	BASE_BRANCH = "android-14.0.0_r28"
 
 	def __init__(self, version: str):
-		super().__init__(version, self.BASE_PATH / version, self.BASE_REMOTE, "clang")
+		super().__init__(
+			version,
+			self.BASE_PATH / f"clang-{version}",
+			"clang",
+			self.BASE_REMOTE,
+			self.BASE_BRANCH,
+			self.BASE_PATH,
+		)
 
 	def prepare(self, arch: Arch) -> None:
 		super().prepare(arch)
@@ -147,7 +179,8 @@ class _ClangToolchain(_Toolchain):
 
 class ClangToolchain(_ClangToolchain):
 	VERSIONS = {
-		"r416183b1": _ClangToolchain("r416183b1"),
+		"r450784e": _ClangToolchain("r450784e"),
+		"r475365b": _ClangToolchain("r475365b"),
 		"r487747c": _ClangToolchain("r487747c"),
 	}
 	DEFAULT = VERSIONS["r487747c"]
