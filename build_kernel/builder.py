@@ -5,7 +5,7 @@ from build_kernel.utils.dumpvars import dumpvars
 from build_kernel.utils.logging import LOGI
 from build_kernel.utils.make import Make
 from build_kernel.utils.mkdtboimg import Dtbo, parse_create_args, parse_dt_entries
-from typing import List, Union
+from typing import List, Optional, Union
 
 class Builder:
 	"""Class representing a build instance."""
@@ -37,7 +37,7 @@ class Builder:
 		"""Dump the kernel variables to stdout."""
 		return dumpvars(self.device)
 
-	def build(self, target: Union[str, List[str]] = None):
+	def build(self, target: Union[str, Optional[List[str]]] = None):
 		"""Build the kernel and create an AnyKernel3 flashable zip."""
 		LOGI("Building defconfig")
 		self.make.run([self.device.TARGET_KERNEL_CONFIG] + self.device.TARGET_KERNEL_FRAGMENTS)
