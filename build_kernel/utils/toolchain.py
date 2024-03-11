@@ -148,8 +148,9 @@ class _ClangToolchain(_Toolchain):
 class ClangToolchain(_ClangToolchain):
 	VERSIONS = {
 		"r416183b1": _ClangToolchain("r416183b1"),
+		"r487747c": _ClangToolchain("r487747c"),
 	}
-	DEFAULT = VERSIONS["r416183b1"]
+	DEFAULT = VERSIONS["r487747c"]
 
 	@classmethod
 	def from_version(cls, version: str) -> _ClangToolchain:
